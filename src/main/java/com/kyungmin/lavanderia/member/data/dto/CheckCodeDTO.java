@@ -13,6 +13,6 @@ import lombok.NoArgsConstructor;
 public class CheckCodeDTO {
     @Schema(description = "회원 이메일", example = "user@naver.com", required = true)
     private String email;
-    @Schema(description = "받은 인증 코드", example = "123456", required = true)
-    private String code;
+    @Schema(description = "받은 인증 토큰", example = "uuid", required = true)
+    private String token;
 }

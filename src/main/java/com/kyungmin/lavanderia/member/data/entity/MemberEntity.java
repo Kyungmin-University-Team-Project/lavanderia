@@ -37,6 +37,9 @@ public class MemberEntity implements UserDetails {
     @Column(name = "MEMBER_PHONE")
     private String memberPhone; // 멤버 전화번호
 
+    @Column(name = "MEMBER_BIRTHDAY")
+    private Date memberBirthday; // 멤버 생일
+
     @Column(name = "MEMBER_LEVEL")
     private String memberLevel; // 멤버 레벨
 
@@ -72,12 +75,13 @@ public class MemberEntity implements UserDetails {
 
 
     @Builder
-    public MemberEntity(String memberId, String memberPwd, String memberName,String memberEmail, String memberPhone, String agreeMarketingYn,String memberRole){
+    public MemberEntity(String memberId, String memberPwd, String memberName,String memberEmail, String memberPhone, String agreeMarketingYn,String memberRole,Date memberBirthday){
         this.memberId = memberId;
         this.memberPwd = memberPwd;
         this.memberName = memberName;
         this.memberEmail = memberEmail;
         this.memberPhone = memberPhone;
+        this.memberBirthday = memberBirthday;
         this.memberRole = memberRole;
         this.agreeMarketingYn = agreeMarketingYn;
     }

@@ -44,7 +44,7 @@ public class MemberApiController {
     }
 
     @PostMapping("/check-member-id")
-    @Operation(summary = "전화번호 중복 확인", description = "전화번호 중복을 확인합니다.")
+    @Operation(summary = "아이디 중복 확인", description = "전화번호 중복을 확인합니다.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "아이디 가입 가능", content = @Content(mediaType = "application/json")),
             @ApiResponse(responseCode = "400", description = "아이디 가입 불가능", content = @Content(mediaType = "application/json")),
@@ -84,52 +84,6 @@ public class MemberApiController {
         } catch (DuplicatePhoneNumberEx e) {
             httpStatus = HttpStatus.BAD_REQUEST;
             result = "이미 존재하는 번호입니다";
-        }
-
-        return response(httpStatus, result);
-    }
-
-    @PostMapping("/send-code")
-    @Operation(summary = "이메일 인증코드 전송", description = "이메일 인증코드를 전송합니다.")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "이메일 인증코드 전송 완료", content = @Content(mediaType = "application/json")),
-            @ApiResponse(responseCode = "400", description = "이메일 인증코드 전송 실패", content = @Content(mediaType = "application/json")),
-    })
-    public ResponseEntity<String> sendSignupCode(@RequestBody String email) {
-
-        HttpStatus httpStatus;
-        String result;
-
-        try {
-            memberService.sendSignupCode(email);
-            httpStatus = HttpStatus.CREATED;
-            result = "이메일 전송 완료";
-        } catch (EmailSendFailedEx e) {
-            httpStatus = HttpStatus.BAD_REQUEST;
-            result = "이메일 전송 실패";
-        }
-
-        return response(httpStatus, result);
-    }
-
-    @PostMapping("/check-code")
-    @Operation(summary = "이메일 인증코드 검사", description = "이메일 인증코드를 검사합니다.")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "이메일 인증코드 인증 성공", content = @Content(mediaType = "application/json")),
-            @ApiResponse(responseCode = "400", description = "이메일 인증코드 인증 실패", content = @Content(mediaType = "application/json")),
-    })
-    public ResponseEntity<String> checkSignupCode(@RequestBody CheckCodeDTO checkCodeDTO) {
-
-        HttpStatus httpStatus;
-        String result;
-
-        try {
-            memberService.checkSignupCode(checkCodeDTO.getEmail(), checkCodeDTO.getCode());
-            httpStatus = HttpStatus.CREATED;
-            result = "이메일 인증 성공";
-        } catch (EmailAuthenticationFailedEx e) {
-            httpStatus = HttpStatus.BAD_REQUEST;
-            result = "이메일 인증 실패";
         }
 
         return response(httpStatus, result);

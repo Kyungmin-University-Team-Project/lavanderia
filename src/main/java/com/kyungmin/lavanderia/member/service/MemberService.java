@@ -10,9 +10,5 @@ public interface MemberService extends UserDetailsService {
 
     public void checkPhoneNumber(String phoneNumber);
 
-    public void sendSignupCode(String email);
 
-    public void checkSignupCode(String email, String code);
-
-    public void sendEmail(String email,String subject, String text);
 }

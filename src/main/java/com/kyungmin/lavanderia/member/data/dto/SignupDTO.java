@@ -1,12 +1,12 @@
 package com.kyungmin.lavanderia.member.data.dto;
 
-import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.Date;
 
 @Data
 @Builder
@@ -24,6 +24,13 @@ public class SignupDTO {
     private String memberEmail;
     @Schema(description = "회원 전화번호", example = "010-1234-5678", required = true)
     private String memberPhone;
+    @Schema(description = "생일", example = "1990-05-20", required = true)
+    private Date memberBirth;
+    @Schema(description = "주소", example = "경기도 고양시 ㅇㅇ로 55", required = true)
+    private String address;
+    @Schema(description = "상세 주소", example = "101동 101호", required = true)
+    private String detailAddress;
     @Schema(description = "마케팅 동의 여부", example = "N", required = true)
     private String agreeMarketingYn;
+
 }

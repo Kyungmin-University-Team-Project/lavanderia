@@ -1,7 +1,9 @@
 package com.kyungmin.lavanderia.member.service.impl;
 
 import com.kyungmin.lavanderia.member.data.dto.SignupDTO;
+import com.kyungmin.lavanderia.member.data.entity.AddressEntity;
 import com.kyungmin.lavanderia.member.data.entity.MemberEntity;
+import com.kyungmin.lavanderia.member.data.repository.AddressRepository;
 import com.kyungmin.lavanderia.member.data.repository.MemberRepository;
 import com.kyungmin.lavanderia.member.exception.DuplicateMemberIdEx;
 import com.kyungmin.lavanderia.member.exception.DuplicatePhoneNumberEx;
@@ -27,9 +29,9 @@ import java.util.concurrent.TimeUnit;
 public class MemberServiceImpl implements MemberService {
 
     private final MemberRepository memberRepository;
+    private final AddressRepository addressRepository;
     private final BCryptPasswordEncoder passwordEncoder;
-    private final RedisTemplate<String, Object> redisTemplate;
-    private final JavaMailSender javaMailSender;
+
 
 
     @Override
@@ -41,10 +43,20 @@ public class MemberServiceImpl implements MemberService {
                 .memberName(signupDto.getMemberName())
                 .memberEmail(signupDto.getMemberEmail())
                 .memberPhone(signupDto.getMemberPhone())
+                .memberBirthday(signupDto.getMemberBirth())
                 .agreeMarketingYn(signupDto.getAgreeMarketingYn())
                 .build();
 
+        AddressEntity addressEntity = AddressEntity.builder()
+                .memberId(signupDto.getMemberId())
+                .address(signupDto.getAddress())
+                .detailAddress(signupDto.getDetailAddress())
+                .receiver(signupDto.getMemberId())
+                .phone(signupDto.getMemberPhone())
+                .build();
+
         memberRepository.save(memberEntity);
+        addressRepository.save(addressEntity);
     }
 
     @Override
@@ -67,56 +79,7 @@ public class MemberServiceImpl implements MemberService {
         }
     }
 
-    @Override
-    public void sendSignupCode(String email) {
 
-        int code = (int) (Math.random() * 1000000);
-
-        String subject = "Lavanderia 이메일 인증" ;
-        String text = "Lavanderia 이메일 인증코드는 " + code + " 입니다";
-
-        redisTemplate.opsForValue().set("Email Authentication Code, Member Email : " + email,String.valueOf(code),5, TimeUnit.MINUTES);
-
-        try {
-            sendEmailUtil(email, subject, text);
-        } catch (MessagingException e) {
-            throw new EmailSendFailedEx(email, e);
-        }
-
-    }
-
-
-    @Override
-    public void checkSignupCode(String email, String code) {
-
-        String getCode = (String) redisTemplate.opsForValue().get(email);
-
-        if (code.equals(getCode)) {
-            redisTemplate.delete(email);
-        } else {
-            throw new EmailAuthenticationFailedEx(email);
-        }
-    }
-
-    @Override
-    public void sendEmail(String email, String subject, String text) {
-        try {
-            sendEmailUtil(email, subject, text);
-        } catch (MessagingException e) {
-            throw new EmailSendFailedEx(email, e);
-        }
-    }
-
-    public void sendEmailUtil(String email, String subject, String text) throws MessagingException{
-        MimeMessage mimeMessage = javaMailSender.createMimeMessage();
-
-        MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, false, "UTF-8");
-        mimeMessageHelper.setTo(email); // 메일 수신자
-        mimeMessageHelper.setSubject(subject); // 메일 제목
-        mimeMessageHelper.setText(text); // 메일 본문 내용
-        javaMailSender.send(mimeMessage);
-
-    }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
