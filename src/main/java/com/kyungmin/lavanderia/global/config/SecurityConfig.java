@@ -30,7 +30,7 @@ import java.util.Collections;
 @Configuration
 @RequiredArgsConstructor
 @EnableWebSecurity // Spring Security를 위한 설정 클래스임을 선언
-@ComponentScan(basePackages = {"com.kyungmin.lavanderia.auth.jwt.data.*","com.kyungmin.lavanderia.*"})
+@ComponentScan(basePackages = {"com.kyungmin.lavanderia.global.auth.jwt.data.*","com.kyungmin.lavanderia.*"})
 public class SecurityConfig {
 
     private final AuthenticationConfiguration authenticationConfiguration;

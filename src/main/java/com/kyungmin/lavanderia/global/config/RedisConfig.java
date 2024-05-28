@@ -11,7 +11,7 @@ import org.springframework.data.redis.repository.configuration.EnableRedisReposi
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 @Configuration
-@EnableRedisRepositories(basePackages = "com.kyungmin.lavanderia.auth.jwt.data.repository", enableKeyspaceEvents =
+@EnableRedisRepositories(basePackages = "com.kyungmin.lavanderia.global.auth.jwt.data.repository", enableKeyspaceEvents =
         RedisKeyValueAdapter.EnableKeyspaceEvents.ON_STARTUP)
 public class RedisConfig {
 
