@@ -7,7 +7,7 @@ const FloatingUpButton = () => {
   }
 
   return (
-    <div className="fixed m-auto bottom-6 right-6 lg:right-[670px]">
+    <div className="fixed m-auto bottom-6 right-6">
       <button
         onClick={scrollToTop}
         className="bg-gray-800 text-white p-3 rounded-full shadow-lg flex items-center justify-center opacity-70"

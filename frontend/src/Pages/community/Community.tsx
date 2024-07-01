@@ -97,7 +97,7 @@ const Community = () => {
                 <div className="text-gray-500 text-sm">{post.category} - {new Date(post.createdAt).toLocaleDateString()}</div>
               </div>
             </div>
-            <div className="font-bold text-xl">{post.title}</div>
+            <div className="mb-2 font-bold text-xl">{post.title}</div>
             {post.image && (
               <div className="mb-2">
                 <img src={post.image} alt={post.title} className="m-auto w-full h-auto rounded" />
