@@ -1,22 +1,53 @@
-import React, { useContext } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { AuthContext } from '../../Context';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 const MyPage = () => {
-  const { logout } = useContext(AuthContext);
-  const navigate = useNavigate();
+    const { access, logout } = useContext(AuthContext);
+    const [userName, setUserName] = useState<string | null>(null);
+    const navigate = useNavigate();
 
-  const handleLogout = () => {
-    logout();
-    navigate('/');
-  };
+    console.log(access)
+    useEffect(() => {
+        const fetchUserName = async () => {
+            try {
+                const response = await axios.post('localhost:8080/member-info', {
+                    headers: {
+                        access: access,
+                    }
+                });
+                setUserName(response.data.memberName);
+            } catch (error : any) {
+                if (error.response && error.response.status === 404) {
+                    console.error('Endpoint not found:', error);
+                } else if (error.response && error.response.status === 401) {
+                    console.error('Failed to fetch user information:', error);
+                } else {
+                    console.error('eeeee')
+                }
+            }
+        };
 
-  return (
-    <div>
-      <h1>My Page</h1>
-      <button onClick={handleLogout}>Logout</button>
-    </div>
-  );
+        if (access) {
+            fetchUserName();
+            console.log(1)
+        }
+    }, [access]);
+
+    const handleLogout = () => {
+        logout();
+        navigate('/');
+    };
+
+    return (
+        <article>
+            <section>
+                <h1>Welcome, {userName ? userName : "Loading..."}</h1>
+            </section>
+            <button onClick={handleLogout}>Logout</button>
+        </article>
+    );
 };
 
 export default MyPage;
