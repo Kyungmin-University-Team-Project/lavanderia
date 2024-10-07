@@ -1,0 +1,14 @@
+FROM continuumio/miniconda3
+
+WORKDIR /app
+
+COPY imagerun.yaml /app/imagerun.yaml
+COPY prototype_api.py /app/prototype_api.py
+COPY best_resnetv2.pth /app/best_resnetv2.pth
+
+RUN conda env create -f imagerun.yaml
+SHELL ["conda", "run", "-n", "imagerun", "/bin/bash", "-c"]
+
+EXPOSE 5000
+
+CMD ["conda", "run", "--no-capture-output", "-n", "imagerun", "python", "prototype_api.py"]
