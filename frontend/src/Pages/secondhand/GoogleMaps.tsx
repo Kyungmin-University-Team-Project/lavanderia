@@ -15,7 +15,7 @@ interface Item {
 const GoogleMaps = () => {
   const [list, setList] = useState('')
   const [trades, setTrades] = useState<Item[]>([])
-  const API_KEY = process.env.REACT_APP_GOOGLE_MAPS_API_KEY // 발급받은 Google API 키
+  const API_KEY = process.env.REACT_APP_GOOGLE_MAPS_API_KEY
 
   useEffect(() => {
     navigator.geolocation.getCurrentPosition((position) => {
@@ -28,18 +28,17 @@ const GoogleMaps = () => {
           const data = response.data
           // 렌더링 주소 확인용
           const location = response.data.results[3].formatted_address
-          console.log(data)
-          console.log(location, 'asdasd')
           const usdTradeResponse = await axios.get('/mock/usdTrade.json')
           const usdData = usdTradeResponse.data
+          // trim 써야 filter 되는 이유 나중에 찾기 city, subregion에 trim 차이 찾기
           const filteredData = usdData.filter((value: any) => {
+            console.log(value.subregion, 'asdasd')
             return (
-              value.city.trim() ===
-              data.results[0].address_components[2].long_name.trim()
+              value.subregion ===
+              data.results[0].address_components[1].long_name.trim()
             )
           })
 
-          console.log(filteredData, 'filter')
           setTrades(filteredData)
           setList(location)
         } catch (e) {
