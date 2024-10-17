@@ -33,77 +33,76 @@ const GoogleMaps = () => {
   const API_KEY = process.env.REACT_APP_GOOGLE_MAPS_API_KEY // 발급받은 Google API 키
 
   useEffect(() => {
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        const getLocation = async () => {
-          const { latitude, longitude } = position.coords
-          setCurrentPosition({ latitude, longitude })
-          try {
-            // 위치 정보 요청
-            const response = await axios.get(
-              `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&language=ko&region=ko&key=${API_KEY}`,
-            )
-            const data = response.data
-            // 위치 주소 확인
-            const location = data.results[3].formatted_address
-            setList(location)
-            // Mock 데이터 요청
-            const usdTradeResponse = await axios.get('/mock/usdTrade.json')
-            const usdData = usdTradeResponse.data
+          navigator.geolocation.getCurrentPosition(
+              (position) => {
+                const getLocation = async () => {
+                  const { latitude, longitude } = position.coords
+                  setCurrentPosition({ latitude, longitude })
+                  try {
+                    // 위치 정보 요청
+                    const response = await axios.get(
+                        `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&language=ko&region=ko&key=${API_KEY}`,
+                    )
+                    const data = response.data
+                    // 위치 주소 확인
+                    const location = data.results[3].formatted_address
+                    setList(location)
+                    // Mock 데이터 요청
+                    const usdTradeResponse = await axios.get('/mock/usdTrade.json')
+                    const usdData = usdTradeResponse.data
 
-            const addressComponents =
-              response.data.results[0].address_components
+                    const addressComponents =
+                        response.data.results[0].address_components
 
-            const searchAddress = (
-              components: AddressComponent[],
-              type: string,
-            ): AddressComponent | undefined => {
-              return components.find((components) =>
-                components.types.includes(type),
-              )
-            }
+                    const searchAddress = (
+                        components: AddressComponent[],
+                        type: string,
+                    ): AddressComponent | undefined => {
+                      return components.find((components) =>
+                          components.types.includes(type),
+                      )
+                    }
 
-            const region = searchAddress(addressComponents, 'political')
-            console.log(region, 'asdasdas')
-            // 동네 필터링
-            const filteredData = usdData.filter((value: Item) => {
-              return value.subregion === region?.long_name
-            })
-            setTrades(filteredData)
-            if (previousPosition) {
-              // 거리 계산
-              const distance = calculateDistance(
-                previousPosition.latitude,
-                previousPosition.longitude,
-                latitude,
-                longitude,
-              )
-              if (distance >= 2) {
-                alert('2km 이상 이동하여 위치를 다시 가져옵니다.')
-                setPreviousPosition({ latitude, longitude })
-                // 위치 기반 데이터 필터링
-                console.log(filteredData, '필터된 데이터')
-                setTrades(filteredData)
-              }
-            } else {
-              setPreviousPosition({ latitude, longitude })
-            }
-          } catch (e) {
-            console.log(e)
-          }
-        }
-        getLocation()
-      },
-      (error) => {
-        console.error(error)
-        alert('위치 정보를 가져올 수 없습니다.')
-      },
-      {
-        enableHighAccuracy: true, // 정확한 위치 정보 요청
-        timeout: 10000, // 10초 안에 위치 정보 가져오기
-        maximumAge: 0, // 캐시된 위치 정보 사용하지 않기
-      },
-    )
+                    const region = searchAddress(addressComponents, 'political')
+                    console.log(region, 'asdasdas')
+                    // 동네 필터링
+                    const filteredData = usdData.filter((value: Item) => {
+                      return value.subregion === region?.long_name.trim()
+                    })
+                    setTrades(filteredData)
+                    if (previousPosition) {
+                      // 거리 계산
+                      const distance = calculateDistance(
+                          previousPosition.latitude,
+                          previousPosition.longitude,
+                          latitude,
+                          longitude,
+                      )
+                      if (distance >= 2) {
+                        alert('2km 이상 이동하여 위치를 다시 가져옵니다.')
+                        setPreviousPosition({ latitude, longitude })
+                        // 위치 기반 데이터 필터링
+                        console.log(filteredData, '필터된 데이터')
+                        setTrades(filteredData)
+                      }
+                    } else {
+                      setPreviousPosition({ latitude, longitude })
+                    }
+                  } catch (e) {
+                    console.log(e)
+                  }
+                }
+                getLocation()
+              },
+              (error) => {
+                  console.error(error);
+              },
+              {
+                enableHighAccuracy: true, // 정확한 위치 정보 요청
+                timeout: 10000, // 10초 안에 위치 정보 가져오기
+                maximumAge: 0, // 캐시된 위치 정보 사용하지 않기
+              },
+          )
   }, [previousPosition]) // 존재하는 데이터 변경될 떄만 실행
 
   return (

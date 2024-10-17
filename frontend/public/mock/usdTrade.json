@@ -6,17 +6,8 @@
     "price": 100,
     "city": "양주시",
     "region": "경기",
-    "subregion": "덕계동",
+    "subregion": "가능동",
     "imgUrl": "trade01.jpg"
-  },
-  {
-    "id": 2,
-    "name": "Smartphone",
-    "description": "A new smartphone",
-    "price": 300,
-    "city": "New York",
-    "region": "NY",
-    "imgUrl": "trade02.jpg"
   },
   {
     "id": 3,
@@ -36,112 +27,6 @@
     "city": "양주시",
     "region": "경기",
     "subregion": "덕계동",
-    "imgUrl": "trade04.png"
-  },
-  {
-    "id": 5,
-    "name": "일본식 카레",
-    "description": "진한 카레 팔아요",
-    "price": 15,
-    "city": "양주시",
-    "region": "경기",
-    "subregion": "덕계동",
-    "imgUrl": "trade01.jpg"
-  }
-
-,
-  {
-    "id": 6,
-    "name": "일본식 카레",
-    "description": "진한 카레 팔아요",
-    "price": 15,
-    "city": "양주시",
-    "region": "경기",
-    "subregion": "만송동",
-    "imgUrl": "trade01.jpg"
-  }
-
-,
-  {
-    "id": 7,
-    "name": "일본식 카레",
-    "description": "진한 카레 팔아요",
-    "price": 15,
-    "city": "양주시",
-    "region": "경기",
-    "subregion": "만송동",
-    "imgUrl": "trade01.jpg"
-  },
-  {
-    "id": 8,
-    "name": "Smartphone",
-    "description": "A new smartphone",
-    "price": 300,
-    "city": "양주시",
-    "region": "경기",
-    "subregion": "만송동",
-    "imgUrl": "trade02.jpg"
-  },
-  {
-    "id": 9,
-    "name": "스킨",
-    "description": "자연을 담은 스킨 팔아요",
-    "price": 50,
-    "city": "양주시",
-    "region": "경기",
-    "subregion": "만송동",
-    "imgUrl": "trade03.jpg"
-  },
-  {
-    "id": 10,
-    "name": "건강한 레몬",
-    "description": "맛나는 레몬에이드 팔아요",
-    "price": 20,
-    "city": "양주시",
-    "region": "경기",
-    "subregion": "만송동",
-    "imgUrl": "trade04.png"
-  }
-
-,
-  {
-    "id": 11,
-    "name": "일본식 카레",
-    "description": "진한 카레 팔아요",
-    "price": 15,
-    "city": "의정부시",
-    "region": "경기",
-    "subregion": "가능동",
-    "imgUrl": "trade01.jpg"
-  },
-  {
-    "id": 12,
-    "name": "Smartphone",
-    "description": "A new smartphone",
-    "price": 300,
-    "city": "의정부시",
-    "region": "경기",
-    "subregion": "가능동",
-    "imgUrl": "trade02.jpg"
-  },
-  {
-    "id": 13,
-    "name": "스킨",
-    "description": "자연을 담은 스킨 팔아요",
-    "price": 50,
-    "city": "의정부시",
-    "region": "경기",
-    "subregion": "가능동",
-    "imgUrl": "trade03.jpg"
-  },
-  {
-    "id": 14,
-    "name": "건강한 레몬",
-    "description": "맛나는 레몬에이드 팔아요",
-    "price": 20,
-    "city": "의정부시",
-    "region": "경기",
-    "subregion": "가능동",
     "imgUrl": "trade04.png"
   }
 ]
