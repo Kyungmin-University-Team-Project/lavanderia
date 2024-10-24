@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { AuthContext } from '../../Context'
 import axiosInstance from '../application/axiosInstance'
 import { FaAngleRight } from 'react-icons/fa'
+import {API_URL} from "../../Api/api";
 
 interface MemberInfo {
   memberBirth: string
@@ -31,7 +32,7 @@ const MyPage = () => {
   useEffect(() => {
     const memberPost = async () => {
       try {
-        const response = await axiosInstance.post('/member-info')
+        const response = await axiosInstance.post(`${API_URL}/member-info`);
         const data = response.data
         setList(data)
       } catch (e: any) {
