@@ -10,13 +10,14 @@ const axiosInstance = axios.create({
   withCredentials: true,
 })
 
-axiosInstance.interceptors.response.use(
+axiosInstance.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem('access')
 
     if (token && secretKey) {
       const bytes = CryptoJS.AES.decrypt(token, secretKey)
       const decryptedToken = bytes.toString(CryptoJS.enc.Utf8)
+
       config.headers['access'] = decryptedToken
     }
     return config
