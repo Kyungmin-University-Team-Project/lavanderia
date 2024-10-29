@@ -3,12 +3,12 @@ import CryptoJS from 'crypto-js'
 import {API_URL} from "../../Api/api";
 
 const secretKey = process.env.REACT_APP_CRYPTOJS_KEY
-
 const axiosInstance = axios.create({
   baseURL: API_URL,
-  headers: { 'X-Custom-Header': 'foobar' },
+  headers: { "Content-Type": "application/json" },
   withCredentials: true,
-})
+});
+
 
 axiosInstance.interceptors.request.use(
   (config) => {
