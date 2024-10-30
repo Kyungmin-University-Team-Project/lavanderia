@@ -5,6 +5,8 @@ import 'react-calendar/dist/Calendar.css' // Import CSS for the calendar
 import { EditFieldProps } from '../../Typings/Application/Applicattion'
 import Postcode from '../../Components/postcode/Postcode'
 import { kakaoPaymentRequest } from '../../Typings/payment/payment'
+import axiosInstance from './axiosInstance'
+import { API_URL } from '../../Api/api'
 
 const EditField: React.FC<EditFieldProps> = ({ label, defaultValue }) => (
   <div className="mb-2">
@@ -20,14 +22,44 @@ const EditField: React.FC<EditFieldProps> = ({ label, defaultValue }) => (
   </div>
 )
 
+type OrderDetail = {
+  productId: string;
+  quantity: number;
+  price: number;
+};
+
+type Order = {
+  rcvrName: string;
+  rcvrPhone: string;
+  rcvrAddress: string;
+  rcvrDetailAddress: string;
+  rcvrPostalCode: string;
+  dlvrReqMessage: string;
+  orderDetailList: OrderDetail[];
+};
+
+
 const Payment: React.FC = () => {
-  const location = useLocation()
-  // const { title } = location.state || { title: '서비스 선택' }
-  const totalPrice = location.state.status
-  console.log(totalPrice)
+  // const location = useLocation()
+  const totalPrice = 123
+  const [order, setOrder] = useState<Order>({
+    rcvrName: "1",
+    rcvrPhone: "1",
+    rcvrAddress: "1",
+    rcvrDetailAddress: "1",
+    rcvrPostalCode: "1",
+    dlvrReqMessage: "1",
+    orderDetailList: [
+      {
+        productId: "029f45a1-42d4-4a36-9a40-7421b2aeda37",
+        quantity: 1,
+        price: totalPrice,
+      },
+    ],
+  });
 
   const [isPostcodeOpen, setIsPostcodeOpen] = useState(false)
-  const [address, setAddress] = useState('')
+  // const [address, setAddress] = useState('')
   const [pickupDate, setPickupDate] = useState<Date | null>(null)
   const [deliveryDate, setDeliveryDate] = useState<Date | null>(null)
   const [isPickupCalendarOpen, setIsPickupCalendarOpen] = useState(false)
@@ -36,12 +68,25 @@ const Payment: React.FC = () => {
   const pickupCalendarRef = useRef<HTMLDivElement>(null)
   const deliveryCalendarRef = useRef<HTMLDivElement>(null)
 
+  const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+
+    setOrder((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+
   const handleAddressClick = () => {
     setIsPostcodeOpen(true)
   }
 
   const handleAddressComplete = (selectedAddress: string) => {
-    setAddress(selectedAddress)
+    setOrder((prev) => ({
+      ...prev,
+      rcvrAddress: selectedAddress,
+    }))
     setIsPostcodeOpen(false)
   }
 
@@ -89,13 +134,18 @@ const Payment: React.FC = () => {
   }, [isPickupCalendarOpen, isDeliveryCalendarOpen])
 
   const handleKakaoPaymentBtn = async () => {
-    const orderId = crypto.randomUUID()
     try {
-      await kakaoPaymentRequest(totalPrice, orderId)
+      const response = await axiosInstance.post(`${API_URL}/order/add`, { ...order });
+      if (response.status === 200) {
+        console.log(response.data);
+      }
+      await kakaoPaymentRequest(response.data, totalPrice);
     } catch (e) {
-      console.log(e)
+      console.log(e);
     }
-  }
+  };
+
+
 
   return (
     <div className="container mx-auto w-full p-5">
@@ -159,34 +209,81 @@ const Payment: React.FC = () => {
             </div>
           </div>
 
-          <div className="flex flex-col justify-center rounded-lg border p-5 shadow-md">
+          <form className="flex flex-col justify-center rounded-lg border p-5 shadow-md">
             <h2 className="mb-4 text-xl font-bold">수거/배송 정보</h2>
-            <EditField label="이름" defaultValue="이용준" />
-            <EditField label="연락처" defaultValue="010-3043-4930" />
+            <div>
+              <label htmlFor="rcvrName">
+                이름
+                <input
+                  name="rcvrName"
+                  className="w-full rounded border p-2"
+                  value={order.rcvrName}
+                  onChange={handleOnChange}
+                  placeholder="이름"
+                />
+              </label>
+            </div>
+            <div>
+              <label htmlFor="rcvrPhone">
+                핸드폰 번호
+                <input
+                  className="w-full rounded border p-2"
+                  name="rcvrPhone"
+                  value={order.rcvrPhone}
+                  onChange={handleOnChange}
+                  placeholder="이름"
+                />
+              </label>
+            </div>
             <div className="mb-2">
-              <label className="block font-semibold">주소</label>
+              <label htmlFor='rcvrAddress' className="block font-semibold">주소</label>
               <input
                 type="text"
                 className="w-full rounded border p-2"
-                value={address}
+                name="rcvrAddress"
+                value={order.rcvrAddress}
+                onChange={handleOnChange}
                 onClick={handleAddressClick}
-                readOnly
                 placeholder="주소를 입력해주세요"
                 onFocus={(e) =>
                   e.target.scrollIntoView({
                     behavior: 'smooth',
-                    block: 'center',
+                    block: 'center'
                   })
                 }
               />
             </div>
-            <EditField
-              label="상세 주소"
-              defaultValue="상세 주소를 입력해주세요"
-            />
-            <EditField label="수거 장소" defaultValue="문 앞" />
-            <EditField label="배송 장소" defaultValue="문 앞" />
-          </div>
+            <div>
+              <label htmlFor='rcvrDetailAddress' className="block font-semibold">상세 주소</label>
+              <input
+                className="w-full rounded border p-2 mb-2"
+                name="rcvrDetailAddress"
+                value={order.rcvrDetailAddress}
+                onChange={handleOnChange}
+                placeholder="상세주소를 입력해주세요"
+              />
+            </div>
+            <div>
+              <label htmlFor="rcvrPostalCode">
+                부부 조소
+                <input type="text"
+                       name="rcvrPostalCode"
+                       value={order.rcvrPostalCode}
+                       onChange={handleOnChange} />
+              </label>
+            </div>
+            <div>
+              <label htmlFor="dlvrReqMessage">
+                배송 메세지
+                <input type="text"
+                       name="dlvrReqMessage"
+                       value={order.dlvrReqMessage}
+                       onChange={handleOnChange} />
+              </label>
+            </div>
+            {/*<EditField label="수거 장소" defaultValue="문 앞" />*/}
+            {/*<EditField label="배송 장소" defaultValue="문 앞" />*/}
+          </form>
 
           <div className="flex flex-col justify-center rounded-lg border p-5 shadow-md">
             <h2 className="mb-4 text-xl font-bold">포인트 혜택</h2>
