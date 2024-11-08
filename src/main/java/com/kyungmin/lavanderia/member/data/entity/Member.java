@@ -46,25 +46,25 @@ public class Member implements UserDetails {
     private LocalDate memberBirth; // 멤버 생일
 
     @Column(name = "MEMBER_LEVEL")
-    private String memberLevel; // 멤버 레벨
+    private int memberLevel = 1; // 멤버 레벨
 
     @Column(name = "MEMBER_POINT")
-    private String memberPoint; // 멤버 포인트
+    private int memberPoint = 0; // 멤버 포인트
 
     @Column(name = "AGREE_MARKETING_YN")
     private String agreeMarketingYn;  // 마케팅 동의 여부
 
     @Column(name = "ACC_INACTIVE_YN")
-    private String accInactiveYn;    // 계정 비활성화 여부
+    private String accInactiveYn = "N";    // 계정 비활성화 여부
 
     @Column(name = "TEMP_PWD_YN")
-    private String tempPwdYn; // 임시 비밀번호 여부
+    private String tempPwdYn = "N"; // 임시 비밀번호 여부
 
     @Column(name = "ACC_LOGIN_COUNT")
-    private long accLoginCount; // 누적 로그인 횟수
+    private int accLoginCount = 0; // 누적 로그인 횟수
 
     @Column(name = "LOGIN_FAIL_COUNT")
-    private long loginFailCount;  // 로그인 실패 횟수
+    private int loginFailCount = 0;  // 로그인 실패 횟수
 
     @Column(name = "LAST_LOGIN_DATE")
     private LocalDateTime lastLoginDate;   // 최근 로그인 일시
@@ -77,6 +77,9 @@ public class Member implements UserDetails {
 
     @Column(name = "ACC_DELETE_DATE")
     private LocalDateTime accDeleteDate;   // 계정 삭제 일시
+
+    @Column(name = "PROFILE_IMG")
+    private String memberProfileImg = "default"; // 프로필 이미지
 
 
     @OneToMany(mappedBy = "memberId", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
@@ -91,28 +94,6 @@ public class Member implements UserDetails {
     @OneToMany(mappedBy = "memberId", cascade = CascadeType.ALL)
     List<Order> order; // 주문
 
-    /*@Builder
-    public Member(String memberId, String memberPwd, String memberName, String memberEmail, String memberPhone, String agreeMarketingYn, List<Role> roles, LocalDate memberBirth, String memberLevel,
-                  String memberPoint, String accInactiveYn, String tempPwdYn, long accLoginCount, long loginFailCount, LocalDateTime lastLoginDate, LocalDateTime accRegisterDate, LocalDateTime accUpdateDate, LocalDateTime accDeleteDate){
-        this.memberId = memberId;
-        this.memberPwd = memberPwd;
-        this.memberName = memberName;
-        this.memberEmail = memberEmail;
-        this.memberPhone = memberPhone;
-        this.agreeMarketingYn = agreeMarketingYn;
-        this.memberBirth = memberBirth;
-        this.memberLevel = (memberLevel != null) ? memberLevel : "1";
-        this.memberPoint = (memberPoint != null) ? memberPoint : "0";
-        this.accInactiveYn = (accInactiveYn != null) ? accInactiveYn : "N";
-        this.tempPwdYn = (tempPwdYn != null) ? tempPwdYn : "N";
-        this.accLoginCount = accLoginCount;
-        this.loginFailCount = loginFailCount;
-        this.lastLoginDate = lastLoginDate;
-        this.accRegisterDate = accRegisterDate;
-        this.accUpdateDate = accUpdateDate;
-        this.accDeleteDate = accDeleteDate;
-        this.roles = roles;
-    }*/
 
     @PrePersist
     protected void onCreate() {

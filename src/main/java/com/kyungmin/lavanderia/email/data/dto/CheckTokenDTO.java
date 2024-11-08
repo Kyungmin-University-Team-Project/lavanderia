@@ -1,4 +1,4 @@
-package com.kyungmin.lavanderia.global.util.email.data.dto;
+package com.kyungmin.lavanderia.email.data.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
