@@ -44,7 +44,7 @@ const services = [
     {
         title: "헌옷 수거",
         description: "신청하고 포인트 받기!",
-        details: "여러가지 옷들을 넣어주세요!",
+        details: "수거한 옷들은 검수후 기부를 진행합니다!",
         image: clothesCollectionBox,
     },
 ];

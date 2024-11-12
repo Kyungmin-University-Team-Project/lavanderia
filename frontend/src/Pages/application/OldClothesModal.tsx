@@ -24,7 +24,7 @@ const OldClothesModal = ({closeModal}: any) => {
             onClick={closeModal}
         >
             <div
-                className="flex flex-col justify-between fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[350px] h-[500px] rounded-lg bg-white shadow-2xl p-5"
+                className="flex flex-col justify-between fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[350px] h-[400px] rounded-lg bg-white shadow-2xl p-5"
                 onClick={(event) => event.stopPropagation()} // 이벤트 전파 중지
             >
                 <h2 className="text-center text-xl font-bold mb-4">선택된 상품을 추가합니다</h2>
