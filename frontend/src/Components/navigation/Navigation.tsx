@@ -3,7 +3,7 @@ import { FiBell, FiUser, FiShoppingCart } from "react-icons/fi";
 import Logo from "../common/Logo";
 import useProtectedNavigation from "../../hooks/useProtectedNavigation";
 import FloatingUpButton from "../floating/FloatingUpButton";
-import { useSearchParams, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
 const navLinks = [
   { path: "/application", label: "신청하기", protected: true },
@@ -14,16 +14,33 @@ const navLinks = [
 
 const Navigation: React.FC = () => {
   const [activePath, setActivePath] = useState<string>("");
+  const [isScrollingUp, setIsScrollingUp] = useState(true);
   const protectedNavigate = useProtectedNavigation();
   const location = useLocation();
+  const lastScrollTop = React.useRef(0);
 
   // 현재 경로를 상태에 저장하여 활성화된 카테고리를 설정
   useEffect(() => {
     setActivePath(location.pathname);
   }, [location]);
 
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollTop = window.scrollY;
+      if (scrollTop > lastScrollTop.current) {
+        setIsScrollingUp(false); // 스크롤 다운
+      } else {
+        setIsScrollingUp(true); // 스크롤 업
+      }
+      lastScrollTop.current = scrollTop <= 0 ? 0 : scrollTop;
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   const handleNavigation = (path: string, isProtected: boolean) => {
-    setActivePath(path); // 클릭된 경로를 활성화 상태로 설정
+    setActivePath(path);
     if (isProtected) {
       protectedNavigate(path);
     } else {
@@ -32,7 +49,7 @@ const Navigation: React.FC = () => {
   };
 
   return (
-      <div className="sticky top-0 z-50 bg-white shadow text-base">
+      <div className={`sticky z-50 bg-white shadow text-base transition-all duration-300 ${isScrollingUp ? "top-0" : "-top-16"}`}>
         <div className="flex h-16 w-full items-center justify-between px-7">
           <div className="flex w-1/6 items-center justify-start">
             <FiBell className="h-6 w-6 text-black" />

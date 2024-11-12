@@ -1,9 +1,11 @@
 import axios from 'axios';
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Post } from '../../Typings/community/post';
 import { decryptToken } from '../../Utils/auth/crypto';
 import {API_URL} from "../../Api/api";
+import {ClipLoader} from "react-spinners";
+import ActionBar from "./ActionBar";
 
 const tabs = [
   { name: '전체', active: true },
@@ -17,12 +19,16 @@ const Community = () => {
   const [posts, setPosts] = useState<Post[]>([]);
   const [isScrollingUp, setIsScrollingUp] = useState(false);
   const navigate = useNavigate();
-  let lastScrollTop = 0;
+  const lastScrollTop = useRef(0); //
 
   useEffect(() => {
     const fetchPosts = async () => {
       try {
         const response = await axios.get(`${API_URL}/community/`);
+
+        
+        // TODO: 게시 시간 안보내짐
+        console.log(response.data)
 
         setPosts(response.data);
       } catch (error) {
@@ -36,14 +42,12 @@ const Community = () => {
   useEffect(() => {
     const handleScroll = () => {
       const currentScrollTop = window.scrollY || document.documentElement.scrollTop;
-      if (currentScrollTop > lastScrollTop) {
-        // Scrolling Down
-        setIsScrollingUp(false);
+      if (currentScrollTop > lastScrollTop.current) {
+        setIsScrollingUp(false); // 스크롤 다운
       } else {
-        // Scrolling Up
-        setIsScrollingUp(true);
+        setIsScrollingUp(true); // 스크롤 업
       }
-      lastScrollTop = currentScrollTop <= 0 ? 0 : currentScrollTop; // For Mobile or negative scrolling
+      lastScrollTop.current = currentScrollTop <= 0 ? 0 : currentScrollTop;
     };
 
     window.addEventListener('scroll', handleScroll);
@@ -55,15 +59,12 @@ const Community = () => {
   };
 
   const handleWritePost = () => {
-    navigate('/community/write'); // Assuming you have a route for writing posts
+    navigate('/community/write');
   };
 
   return (
     <div className="max-w-2xl mx-auto h-full">
-
-      {/* Header */}
-
-      <header className="w-full px-4 sticky top-[116px] z-10  backdrop-blur-sm">
+      <header className="w-full px-4 sticky top-[50px] z-10 backdrop-blur-sm">
         <div className="flex gap-4 p-3">
           {tabs.map(tab => (
             <button
@@ -77,41 +78,45 @@ const Community = () => {
         </div>
       </header>
 
-      {/* Posts */}
+      {/* TODO: 각 포스트에 대한 슬라이드 기능 추가*/}
 
       <div className="space-y-4 px-4">
         {posts.map(post => (
           <button
             key={post.communityId}
-            className="bg-white p-4 w-full mt-3 rounded shadow-lg hover:bg-gray-100 cursor-pointer text-left"
-            onClick={() => handlePostClick(post)}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter' || e.key === ' ') {
-                handlePostClick(post);
-              }
-            }}
-          >
-            <div className="flex items-center mb-2">
+            className="bg-white w-full mt-3 rounded shadow-lg border-gray-300 cursor-pointer text-left"
+            onClick={() => handlePostClick(post)}>
+            <div className="flex items-center p-4">
               <div className="bg-gray-200 w-10 h-10 rounded-full"></div>
               <div className="ml-3">
                 <div className="font-bold">{post.memberId}</div>
                 <div className="text-gray-500 text-sm">{post.category} - {new Date(post.createdAt).toLocaleDateString()}</div>
               </div>
             </div>
-            <div className="mb-2 font-bold text-xl">{post.title}</div>
+            
+            {/* TODO: 이미지 여기서 이미지가 여러장일 경우 슬라이드로 보여지도록 수정*/}
             {post.image && (
               <div className="mb-2">
-                <img src={post.image} alt={post.title} className="m-auto w-full h-auto rounded" />
+                <img src={post.image} alt={post.title} className="m-auto w-full h-auto" />
               </div>
             )}
-            <div className="mb-2">{post.content}</div>
-            <div className="text-gray-500 text-sm">조회수: {post.viewCount}</div>
+
+
+            <div className="px-4">
+              {/*이부분에 ActionBar*/}
+              <ActionBar/>
+
+              {/*게시글 본문 본문은 1줄정도만 작게 보여주고
+                나머지는 상세페이지에서 확인하도록*/}
+              <div className="mb-2">{post.content}</div>
+            </div>
           </button>
         ))}
       </div>
 
-      <footer className="flex justify-center items-center w-full h-20 bg-red-400">
-        <span className="text-3xl">감지시 피드 불러오기</span>
+      {/*TODO: 인피니티스크롤 구현하기*/}
+      <footer className="flex justify-center items-center w-full h-[200px]">
+        <ClipLoader size={40} color={"#8f8f8f"}/>
       </footer>
 
       <button

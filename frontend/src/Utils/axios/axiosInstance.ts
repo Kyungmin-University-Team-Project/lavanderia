@@ -16,9 +16,7 @@ axiosInstance.interceptors.request.use(
 
     if (token && secretKey) {
       const bytes = CryptoJS.AES.decrypt(token, secretKey)
-      const decryptedToken = bytes.toString(CryptoJS.enc.Utf8)
-        console.log(decryptedToken)
-      config.headers['access'] = decryptedToken
+      config.headers['access'] = bytes.toString(CryptoJS.enc.Utf8)
     }
     return config
   },
