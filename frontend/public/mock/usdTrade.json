@@ -1,0 +1,32 @@
+[
+  {
+    "id": 1,
+    "name": "맛 나는 카레",
+    "description": "안 먹은 카레 팔아요",
+    "price": 100,
+    "city": "양주시",
+    "region": "경기",
+    "subregion": "가능동",
+    "imgUrl": "trade01.jpg"
+  },
+  {
+    "id": 3,
+    "name": "스킨",
+    "description": "자연을 담은 스킨 팔아요",
+    "price": 50,
+    "city": "양주시",
+    "region": "경기",
+    "subregion": "덕계동",
+    "imgUrl": "trade03.jpg"
+  },
+  {
+    "id": 4,
+    "name": "건강한 레몬",
+    "description": "맛나는 레몬에이드 팔아요",
+    "price": 20,
+    "city": "양주시",
+    "region": "경기",
+    "subregion": "덕계동",
+    "imgUrl": "trade04.png"
+  }
+]
