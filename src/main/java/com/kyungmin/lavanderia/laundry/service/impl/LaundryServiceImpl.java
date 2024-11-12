@@ -1,6 +1,6 @@
 package com.kyungmin.lavanderia.laundry.service.impl;
 
-import com.kyungmin.lavanderia.global.util.GoogleCloudUtils;
+import com.kyungmin.lavanderia.global.util.GoogleCloundUtils;
 import com.kyungmin.lavanderia.laundry.data.dto.LaundryDto.LaundryInsert;
 import com.kyungmin.lavanderia.laundry.data.entity.Laundry;
 import com.kyungmin.lavanderia.laundry.mapper.LaundryMapper;
@@ -30,7 +30,7 @@ public class LaundryServiceImpl implements LaundryService {
             LaundryInsert laundry = laundryInserts.get(i);
             MultipartFile laundryImage = laundryImages.get(i);
 
-            String imageUrl = GoogleCloudUtils.uploadSingleFile(laundryImage);
+            String imageUrl = GoogleCloundUtils.uploadSingleFile(laundryImage);
 
             Laundry laundryEntity = LaundryMapper.INSTANCE.toEntity(laundry, imageUrl);
 

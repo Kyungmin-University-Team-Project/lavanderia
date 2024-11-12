@@ -1,6 +1,6 @@
 import * as PortOne from '@portone/browser-sdk/v2'
 import axios from 'axios'
-import axiosInstance from '../../Pages/application/axiosInstance'
+import axiosInstance from '../../Utils/axios/axiosInstance'
 export const kakaoPaymentRequest = async (
   orderId: number,
   totalAmount: number,

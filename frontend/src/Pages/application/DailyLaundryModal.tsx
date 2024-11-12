@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import emptyBasket from '../../Assets/Img/application/empty_laundry_basket.png';
 import fullBasket from '../../Assets/Img/application/full_laundry_basket.png';
 
-const DailyLaundryModal = ({ service, closeModal }: any) => {
+// TODO: 타입 모듈화 하기
+const DailyLaundryModal = ({service, closeModal}: any) => {
     const [selectedOption, setSelectedOption] = useState<string | null>(null);
 
     // 각 버튼 클릭 시 처리 함수
@@ -35,7 +36,6 @@ const DailyLaundryModal = ({ service, closeModal }: any) => {
             >
                 <h2 className="text-center text-xl font-bold mb-4">선택된 상품을 추가합니다</h2>
 
-                {/* 중간 버튼 2개를 flex로 균등하게 배치 */}
                 <div className="flex w-full h-full mb-4 gap-2">
                     <button
                         className={`w-1/2 flex flex-col items-center justify-center p-2 border rounded-lg transition ${
@@ -65,8 +65,8 @@ const DailyLaundryModal = ({ service, closeModal }: any) => {
 
                 {/* 하단 설명과 확인/닫기 버튼 */}
                 <div className="flex flex-col items-center justify-end">
-                    <p className="text-center text-gray-600 mb-5 font-bold">
-                        {service?.title}을(를) 주문 목록에 추가하려면 확인 버튼을 눌러주세요.
+                    <p className="text-center text-gray-500 mb-5 font-bold">
+                        주문 목록에 추가하려면 확인 버튼을 눌러주세요.
                     </p>
                     <div className="flex gap-2">
                         <button

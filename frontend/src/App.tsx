@@ -1,5 +1,5 @@
 import React from 'react'
-import { Route, Routes } from 'react-router-dom'
+import {Route, Routes} from 'react-router-dom'
 import 'tailwindcss/tailwind.css'
 import Community from './Pages/community/Community'
 import ServiceCenter from './Pages/ServiceCenter/ServiceCenter'
@@ -12,7 +12,7 @@ import Signup from './Pages/auth/Signup'
 import Application from './Pages/application/Application'
 import ImgApplication from './Pages/application/ImgApplication'
 import Cart from './Pages/application/Cart'
-import { AuthProvider } from './Context'
+import {AuthProvider} from './Context'
 import Payment from './Pages/application/Payment'
 import ProtectedRoute from './Components/route/ProtectedRoute'
 import RestrictedRoute from './Components/route/RestrictedRoute'
@@ -33,8 +33,10 @@ import DeliveryAddressManagement from './Pages/mypage/DeliveryAddressManagement'
 import PaymentManagement from './Pages/mypage/PaymentManagement'
 import Notificationsettings from "./Pages/mypage/Notificationsettings";
 import CancellationDetails from "./Pages/mypage/CancellationDetails";
-import EnterPassword from "./Pages/mypage/EnterPassword";
 import ChangeDeliveryAddressManagement from "./Pages/mypage/ChangeDeliveryAddressManagement";
+import Repair from "./Pages/application/Repair";
+import RepairCategory from "./Pages/application/RepairCategory";
+import RepairDetail from "./Pages/application/RepairDetail";
 
 function App() {
     return (
@@ -49,36 +51,25 @@ function App() {
                         <Route path="imgApplication" element={<ImgApplication/>}/>
                         <Route path="payment" element={<Payment/>}/>
                         <Route path="cart" element={<Cart/>}/>
-                        <Route path="mypage" element={<MyPage/>}/>
-                        <Route
-                            path="/mypage/changeMemberInformation"
-                            element={<ChangeMemberInformation/>}
-                        />
-                        <Route path="/mypage/changePassword" element={<ChangePassword/>}/>
-                        <Route path="/mypage/orderDetails" element={<OrderDetails/>}/>
-                        <Route
-                            path="/mypage/cancellationDetails"
-                            element={<CancellationDetails/>}
-                        />
-                        <Route
-                            path="/mypage/deliveryAddressManagement"
-                            element={<DeliveryAddressManagement/>}
-                        />
-                        <Route
-                            path="/mypage/paymentManagement"
-                            element={<PaymentManagement/>}
-                        />
-                        <Route
-                            path="/mypage/notificationsettings"
-                            element={<Notificationsettings/>}
-                        />
-                        <Route path='/mypage/deliveryAddressManagement/ChangeDeliveryAddressManagement'
-                               element={<ChangeDeliveryAddressManagement/>}/>
+                        <Route path="repair" element={<Repair />} />
+                        <Route path="repair/:category" element={<RepairCategory />} />
+                        <Route path="repair/:category/detail" element={<RepairDetail />} />
+                        <Route path="mypage" element={<MyPage/>}>
+                            <Route path="changeMemberInformation" element={<ChangeMemberInformation/>}/>
+                            <Route path="changePassword" element={<ChangePassword/>}/>
+                            <Route path="orderDetails" element={<OrderDetails/>}/>
+                            <Route path="cancellationDetails" element={<CancellationDetails/>}/>
+                            <Route path="deliveryAddressManagement" element={<DeliveryAddressManagement/>}/>
+                            <Route path="deliveryAddressManagement/ChangeDeliveryAddressManagement"
+                                   element={<ChangeDeliveryAddressManagement/>}/>
+                            <Route path="paymentManagement" element={<PaymentManagement/>}/>
+                            <Route path="notificationsettings" element={<Notificationsettings/>}/>
+                        </Route>
                     </Route>
                     {/* 로그인 불필요 페이지! */}
                     {/*커뮤니티*/}
                     <Route path="community" element={<Community/>}/>
-                    <Route path="community/:postId" element={<PostDetail/>}/>{' '}
+                    <Route path="community/:postId" element={<PostDetail/>}/>
                     {/* Add PostDetail route */}
                     <Route path="/community/write" element={<CommunityWrite/>}/>
                     {/*중고장터*/}

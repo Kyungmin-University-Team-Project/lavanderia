@@ -1,6 +1,6 @@
 package com.kyungmin.lavanderia.product.service.impl;
 
-import com.kyungmin.lavanderia.global.util.GoogleCloudUtils;
+import com.kyungmin.lavanderia.global.util.GoogleCloundUtils;
 import com.kyungmin.lavanderia.product.data.dto.ProductDTO;
 import com.kyungmin.lavanderia.product.data.entity.Product;
 import com.kyungmin.lavanderia.product.data.entity.ProductImgUrl;
@@ -24,7 +24,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public void insertProduct(ProductDTO productDTO) throws IOException {
 
-        List<String> imageUrls = GoogleCloudUtils.uploadListFile(productDTO.getProductImage());
+        List<String> imageUrls = GoogleCloundUtils.uploadListFile(productDTO.getProductImage());
 
         Product product = ProductMapper.INSTANCE.toEntity(productDTO);
 

@@ -5,7 +5,7 @@ import 'react-calendar/dist/Calendar.css' // Import CSS for the calendar
 import { EditFieldProps } from '../../Typings/Application/Applicattion'
 import Postcode from '../../Components/postcode/Postcode'
 import { kakaoPaymentRequest } from '../../Typings/payment/payment'
-import axiosInstance from './axiosInstance'
+import axiosInstance from '../../Utils/axios/axiosInstance'
 import { API_URL } from '../../Api/api'
 
 const EditField: React.FC<EditFieldProps> = ({ label, defaultValue }) => (

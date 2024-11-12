@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { AuthContext } from '../../Context'
-import axiosInstance from '../application/axiosInstance'
+import axiosInstance from '../../Utils/axios/axiosInstance'
 import { FaAngleRight } from 'react-icons/fa'
 import {API_URL} from "../../Api/api";
 
