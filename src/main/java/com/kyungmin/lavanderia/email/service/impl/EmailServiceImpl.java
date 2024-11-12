@@ -1,6 +1,6 @@
-package com.kyungmin.lavanderia.global.util.email.service.impl;
+package com.kyungmin.lavanderia.email.service.impl;
 
-import com.kyungmin.lavanderia.global.util.email.service.EmailService;
+import com.kyungmin.lavanderia.email.service.EmailService;
 import com.kyungmin.lavanderia.member.exception.EmailAuthenticationFailedEx;
 import com.kyungmin.lavanderia.member.exception.EmailSendFailedEx;
 import jakarta.mail.MessagingException;
@@ -15,7 +15,6 @@ import org.springframework.util.StreamUtils;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 @Service
@@ -35,8 +34,6 @@ public class EmailServiceImpl implements EmailService {
 
         String redisKey = "Email Authentication Code, Member Email : " + email;
         redisTemplate.opsForValue().set(redisKey, randomNumber, 5, TimeUnit.MINUTES);
-        System.out.println("전송 redisKey : " + redisKey);
-        System.out.println("전송 randomNumber : " + randomNumber);
 
         sendEmailUtil(email, subject, text);
     }
@@ -46,6 +43,36 @@ public class EmailServiceImpl implements EmailService {
     public void checkSignupCode(String email, String token) {
         try {
             String redisKey = "Email Authentication Code, Member Email : " + email;
+
+            String getToken = (String) redisTemplate.opsForValue().get(redisKey);
+
+            if (getToken != null && getToken.equals(token)) {
+                redisTemplate.delete(redisKey);
+            } else {
+                throw new EmailAuthenticationFailedEx(email);
+            }
+        }catch (RuntimeException e){
+            throw new RuntimeException(email + " : Email Authentication Code is not found");
+        }
+
+    }
+
+    @Override
+    public void sendIdPwCode(String email, String type) {
+        String randomNumber = Integer.toString((int) ((Math.random() * 900000) + 100000)); // 100000에서 999999 사이의 숫자 생성
+        String subject = "하루세탁 " + type  + " 찾기 인증번호";
+        String text = "인증번호 : " + randomNumber;
+
+        String redisKey = "Find " + type  + " Number Code, Member Email : " + email;
+        redisTemplate.opsForValue().set(redisKey, randomNumber, 5, TimeUnit.MINUTES);
+
+        sendEmailUtil(email, subject, text);
+    }
+
+    @Override
+    public void checkIdPwCode(String email, String token, String type) {
+        try {
+            String redisKey = "Find " + type  + " Number Code, Member Email : " + email;
 
             String getToken = (String) redisTemplate.opsForValue().get(redisKey);
 
