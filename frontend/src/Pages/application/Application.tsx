@@ -24,6 +24,13 @@ const Custom_services = [
         image: premiumLaundry,
         url: "imgApplication",
     },
+    {
+        title: "수선",
+        description: "의류 또는 신발 모두 수선 가능",
+        details: "새로 사는 것보다 수선은 어떠신가요?",
+        image: clothesRepair,
+        url: "repair",
+    },
 ];
 
 const services = [
@@ -32,13 +39,6 @@ const services = [
         description: "소재/색깔 구분없이 일괄 세탁",
         details: "티셔츠, 수건, 속옷 양말등 색상을 구분 해주세요!",
         image: dailyLaundry,
-    },
-    {
-        title: "수선",
-        description: "의류 또는 신발 모두 수선 가능",
-        details: "새로 사는 것보다 수선은 어떠신가요?",
-        image: clothesRepair,
-
     },
     {
         title: "헌옷 수거",
@@ -52,8 +52,7 @@ const Application = () => {
     const [isModalOpen, setIsModalOpen] = useState(false); // 모달 상태를 관리
     const [selectedService, setSelectedService] = useState(null);
 
-    const openModal = (service : any) => {
-        setSelectedService(service);
+    const openModal = () => {
         setIsModalOpen(true);
     };
 
@@ -87,7 +86,7 @@ const Application = () => {
                     ))}
                 </div>
 
-                <div className="col-span-1 grid grid-rows-3 gap-5">
+                <div className="col-span-1 grid grid-rows-2 gap-5">
                     {services.map((service) => (
                         <ServiceCard
                             key={service.title}
@@ -95,7 +94,7 @@ const Application = () => {
                             description={service.description}
                             details={service.details}
                             image={service.image}
-                            onClick={() => openModal(service)}
+                            onClick={openModal}
                         />
                     ))}
                 </div>
