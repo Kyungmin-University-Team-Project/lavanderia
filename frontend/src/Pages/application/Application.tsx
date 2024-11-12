@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, {useState} from "react";
 import laundryWomen from "../../Assets/Img/application/laundry_women.png";
 import premiumLaundry from "../../Assets/Img/application/premium_laundry.png";
 import dailyLaundry from "../../Assets/Img/application/daily_laundry.png";
@@ -8,6 +8,7 @@ import clothesCollectionBox from "../../Assets/Img/application/clothes_collectio
 import CustomServiceCard from "./CustomServiceCard";
 import ServiceCard from "./ServiceCard";
 import DailyLaundryModal from "./DailyLaundryModal";
+import OldClothesModal from "./OldClothesModal";
 
 const Custom_services = [
     {
@@ -49,15 +50,23 @@ const services = [
 ];
 
 const Application = () => {
-    const [isModalOpen, setIsModalOpen] = useState(false); // 모달 상태를 관리
+    const [isDailyLaundryModal, setIsDailyLaundryModal] = useState(false);
+    const [isOldClothesModal, setIsOldClothesModal] = useState(false);
     const [selectedService, setSelectedService] = useState(null);
 
-    const openModal = () => {
-        setIsModalOpen(true);
+    const openDailyLaundryModal = () => {
+        setIsDailyLaundryModal(true);
+    };
+    const closeDailyLaundryModal = () => {
+        setIsDailyLaundryModal(false);
+        setSelectedService(null);
     };
 
-    const closeModal = () => {
-        setIsModalOpen(false);
+    const openOldClothesModal = () => {
+        setIsOldClothesModal(true);
+    };
+    const closeOldClothesModal = () => {
+        setIsOldClothesModal(false);
         setSelectedService(null);
     };
 
@@ -87,22 +96,34 @@ const Application = () => {
                 </div>
 
                 <div className="col-span-1 grid grid-rows-2 gap-5">
-                    {services.map((service) => (
-                        <ServiceCard
-                            key={service.title}
-                            title={service.title}
-                            description={service.description}
-                            details={service.details}
-                            image={service.image}
-                            onClick={openModal}
-                        />
-                    ))}
+                    <ServiceCard
+                        key={services[0].title}
+                        title={services[0].title}
+                        description={services[0].description}
+                        details={services[0].details}
+                        image={services[0].image}
+                        onClick={openDailyLaundryModal}
+                    />
+                    <ServiceCard
+                        key={services[1].title}
+                        title={services[1].title}
+                        description={services[1].description}
+                        details={services[1].details}
+                        image={services[1].image}
+                        onClick={openOldClothesModal}
+                    />
                 </div>
 
-                {isModalOpen && (
+                {isDailyLaundryModal && (
                     <DailyLaundryModal
                         service={selectedService}
-                        closeModal={closeModal}
+                        closeModal={closeDailyLaundryModal}
+                    />
+                )}
+
+                {isOldClothesModal && (
+                    <OldClothesModal
+                        closeModal={closeOldClothesModal}
                     />
                 )}
             </div>
