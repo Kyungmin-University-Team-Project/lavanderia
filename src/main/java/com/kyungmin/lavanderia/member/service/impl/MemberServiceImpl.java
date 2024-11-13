@@ -1,6 +1,8 @@
 package com.kyungmin.lavanderia.member.service.impl;
 
-import com.kyungmin.lavanderia.global.util.email.service.EmailService;
+import com.kyungmin.lavanderia.global.util.GoogleCloudUtils;
+import com.kyungmin.lavanderia.email.service.EmailService;
+import com.kyungmin.lavanderia.member.data.dto.MemberDTO;
 import com.kyungmin.lavanderia.member.data.dto.MemberInfoDTO;
 import com.kyungmin.lavanderia.member.data.dto.SignupDTO;
 import com.kyungmin.lavanderia.member.data.entity.Member;
@@ -15,6 +17,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Optional;
 
@@ -56,7 +59,6 @@ public class MemberServiceImpl implements MemberService {
     // 회원 아이디 중복 체크
     @Override
     public void checkMemberId(String memberId) {
-
         boolean isExist = memberRepository.existsById(memberId);
         if (isExist) {
             throw new DuplicateMemberIdEx(memberId);
@@ -83,24 +85,23 @@ public class MemberServiceImpl implements MemberService {
 
     // 회원정보 조회
     @Override
-    public MemberInfoDTO memberInfo(String memberId) {
-        Member member = findMemberByMemberId(memberId);
+    public MemberInfoDTO memberInfo(Member member) {
 
         return MemberInfoDTO.builder()
                 .memberId(member.getMemberId())
                 .memberName(member.getMemberName())
                 .memberEmail(member.getMemberEmail())
                 .memberPhone(member.getMemberPhone())
-                .memberBirth(member.getMemberBirth())
+                .memberBirth(String.valueOf(member.getMemberBirth()))
                 .memberLevel(member.getMemberLevel())
                 .memberPoint(member.getMemberPoint())
                 .agreeMarketingYn(member.getAgreeMarketingYn())
+                .memberProfileImg(member.getMemberProfileImg())
                 .build();
     }
 
     @Override
-    public void memberDelete(String memberId) {
-        Member member = findMemberByMemberId(memberId);
+    public void memberDelete(Member member) {
         memberRepository.delete(member);
     }
 
@@ -108,6 +109,57 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public void checkSignupCode(String email, String token) {
         emailService.checkSignupCode(email, token);
+    }
+
+    @Override
+    public void updateMemberPwd(Member member, MemberDTO.ChangePasswordDTO request) {
+        try {
+            if (!passwordEncoder.matches(request.getOldPassword(), member.getMemberPwd())) {
+                throw new UsernameNotFoundException("비밀번호가 일치하지 않습니다.");
+            }
+            member.setMemberPwd(passwordEncoder.encode(request.getNewPassword()));
+            memberRepository.save(member);
+        } catch (Exception e) {
+            throw new UsernameNotFoundException("비밀번호 변경 실패 : " + e.getMessage());
+        }
+    }
+
+    // 프로필 이미지 업데이트
+    @Override
+    public void updateMemberProfile(Member member, MultipartFile profileImg) {
+        try {
+            // profileImg 있는 경우
+            if (profileImg != null) {
+                // 기본 이미지인 경우 클라우드에 이미지 추가
+                if (member.getMemberProfileImg().equals("default")) {
+                    // 이미지 업로드
+                    GoogleCloudUtils.uploadImageById(member.getMemberId(), profileImg);
+                    // 이미지 경로 저장
+                    member.setMemberProfileImg(GoogleCloudUtils.getGOOGLE_IMAGE_CLOUD_URL() + member.getMemberId());
+                    memberRepository.save(member);
+
+                // 기존 이미지가 있는 경우 이미지 업데이트
+                } else {
+                    // 새로운 이미지로 업데이트
+                    GoogleCloudUtils.updateImageById(member.getMemberId(), profileImg);
+                }
+
+            // profileImg == null 인 경우 ==> 기본 이미지로 설정
+            }else {
+                // 기존 이미지 삭제
+                GoogleCloudUtils.deleteImageById(member.getMemberId());
+
+                // 기본 이미지로 변경
+                member.setMemberProfileImg("default");
+            }
+        } catch (Exception e) {
+            throw new UsernameNotFoundException("프로필 이미지 업데이트 실패 : " + e.getMessage());
+        }
+    }
+
+    @Override
+    public Member findMemberByEmail(String email) {
+        return memberRepository.findMemberByMemberEmail(email).orElse(null);
     }
 
     // 회원 아이디로 회원 조회
