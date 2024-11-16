@@ -46,8 +46,17 @@ services:
       - "5000:5000"
     volumes:
       - ./src/main/python:/app
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+    environment:
+      - NVIDIA_VISIBLE_DEVICES=all
     depends_on:
-      - tomcat  # Java 애플리케이션 서비스 이름
+      - tomcat
 
 networks:
   network:

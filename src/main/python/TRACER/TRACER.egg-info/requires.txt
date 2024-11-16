@@ -1,0 +1,11 @@
+torch
+torchvision
+opencv-python
+numpy
+albumentations
+tqdm
+scikit-learn
+fastapi
+python-multipart
+uvicorn
+httpx
