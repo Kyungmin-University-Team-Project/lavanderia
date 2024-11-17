@@ -1,7 +1,7 @@
 package com.kyungmin.lavanderia.order.service.impl;
 
 import com.kyungmin.lavanderia.member.data.entity.Member;
-import com.kyungmin.lavanderia.order.data.dto.OrderDTO.OrderInsert;
+import com.kyungmin.lavanderia.order.data.dto.OrderDTO.InsertOrder;
 import com.kyungmin.lavanderia.order.data.entity.Order;
 import com.kyungmin.lavanderia.order.data.entity.OrderDetail;
 import com.kyungmin.lavanderia.order.data.repository.OrderDetailRepository;
@@ -22,7 +22,7 @@ public class OrderServiceImpl implements OrderService {
     private final OrderDetailRepository orderDetailRepository;
 
     @Override
-    public Long insertOrder(Member member, OrderInsert orderDTO) {
+    public Long insertOrder(Member member, InsertOrder orderDTO) {
 
         Order order = OrderMapper.INSTANCE.toEntity(member, orderDTO);
 

@@ -18,7 +18,7 @@ public class OrderDetailDTO {
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class OrderDetailInsert {
+    public static class InsertOrderDetail {
 
         @Schema(description = "상품 ID", example = "b3c9e0a8-7b4b-4a7b-bd9a-4a84f43c2b08")
         private UUID productId;
