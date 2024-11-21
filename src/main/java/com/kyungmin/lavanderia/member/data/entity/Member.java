@@ -94,7 +94,6 @@ public class Member implements UserDetails {
     @OneToMany(mappedBy = "memberId", cascade = CascadeType.ALL)
     List<Order> order; // 주문
 
-
     @PrePersist
     protected void onCreate() {
         LocalDateTime now = LocalDateTime.now();
