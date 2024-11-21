@@ -1,12 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { useLocation } from 'react-router-dom'
 import Calendar, { CalendarProps } from 'react-calendar'
 import 'react-calendar/dist/Calendar.css' // Import CSS for the calendar
 import { EditFieldProps } from '../../Typings/Application/Applicattion'
 import Postcode from '../../Components/postcode/Postcode'
 import { kakaoPaymentRequest } from '../../Typings/payment/payment'
 import axiosInstance from '../../Utils/axios/axiosInstance'
-import { API_URL } from '../../Api/api'
 
 const EditField: React.FC<EditFieldProps> = ({ label, defaultValue }) => (
   <div className="mb-2">
@@ -41,7 +39,7 @@ type Order = {
 
 const Payment: React.FC = () => {
   // const location = useLocation()
-  const totalPrice = 123
+  const totalPrice = 120000
   const [order, setOrder] = useState<Order>({
     rcvrName: "1",
     rcvrPhone: "1",
@@ -51,7 +49,7 @@ const Payment: React.FC = () => {
     dlvrReqMessage: "1",
     orderDetailList: [
       {
-        productId: "029f45a1-42d4-4a36-9a40-7421b2aeda37",
+        productId: "b3c9e0a8-7b4b-4a7b-bd9a-4a84f43c2b08",
         quantity: 1,
         price: totalPrice,
       },
@@ -135,7 +133,7 @@ const Payment: React.FC = () => {
 
   const handleKakaoPaymentBtn = async () => {
     try {
-      const response = await axiosInstance.post(`${API_URL}/order/add`, { ...order });
+      const response = await axiosInstance.post(`/order/add`,  {...order});
       if (response.status === 200) {
         console.log(response.data);
       }

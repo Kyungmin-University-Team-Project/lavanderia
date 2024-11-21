@@ -1,9 +1,10 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
+import {Link} from 'react-router-dom'
 import { AuthContext } from '../../Context'
 import axiosInstance from '../../Utils/axios/axiosInstance'
 import { FaAngleRight } from 'react-icons/fa'
 import {API_URL} from "../../Api/api";
+
 
 interface MemberInfo {
   memberBirth: string
@@ -77,58 +78,58 @@ const MyPage = () => {
           <ul className="space-y-4">
             <li className="flex  justify-between border-b-2 border-solid border-gray-50 pb-4">
               <p className="mb-2 text-sm font-bold  ">회원정보 변경</p>
-              <Link to="changeMemberInformation">
+              <Link to="/mypage/ChangeMemberInformation">
                 <p className="text-sm text-gray-300 underline">
-                  <FaAngleRight />
+                  <FaAngleRight/>
                 </p>
               </Link>
             </li>
 
             <li className="flex justify-between border-b-2 border-solid border-gray-50 pb-4">
               <p className="text-sm font-bold">비밀번호 변경</p>
-              <Link to="changePassword">
+              <Link to="/mypage/changePassword">
                 <p className="text-sm text-gray-300">
-                  <FaAngleRight />
+                  <FaAngleRight/>
                 </p>
               </Link>
             </li>
             <li className="flex justify-between border-b-2 border-solid border-gray-50 pb-4">
               <p className="text-sm font-bold">주문 내역</p>
-              <Link to="orderDetails">
+              <Link to="/mypage/orderDetails">
                 <p className="text-sm text-gray-300">
-                  <FaAngleRight />
+                  <FaAngleRight/>
                 </p>
               </Link>
             </li>
             <li className="flex justify-between border-b-2 border-solid border-gray-50 pb-4">
               <p className="text-sm font-bold">취소 내역</p>
-              <Link to="cancellationDetails">
+              <Link to="/mypage/cancellationDetails">
                 <p className="text-sm text-gray-300">
-                  <FaAngleRight />
+                  <FaAngleRight/>
                 </p>
               </Link>
             </li>
             <li className="flex justify-between border-b-2 border-solid border-gray-50 pb-4">
               <p className="text-sm font-bold">배송지 관리</p>
-              <Link to="deliveryAddressManagement">
+              <Link to="/mypage/deliveryAddressManagement">
                 <p className="text-sm text-gray-300">
-                  <FaAngleRight />
+                  <FaAngleRight/>
                 </p>
               </Link>
             </li>
             <li className="flex justify-between border-b-2 border-solid border-gray-50 pb-4">
               <p className="text-sm font-bold">결제 관리</p>
-              <Link to="paymentManagement">
+              <Link to="/mypage/paymentManagement">
                 <p className="text-sm text-gray-300">
-                  <FaAngleRight />
+                  <FaAngleRight/>
                 </p>
               </Link>
             </li>
             <li className="flex justify-between">
-              <p className=" text-sm font-bold">알림 설정</p>
-              <Link to="notificationSettings">
+              <p className=" text-sm font-bold">문의 하기</p>
+              <Link to="/mypage/inquiry">
                 <p className="text-sm text-gray-300">
-                  <FaAngleRight />
+                  <FaAngleRight/>
                 </p>
               </Link>
             </li>

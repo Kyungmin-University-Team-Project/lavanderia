@@ -7,10 +7,10 @@ export const kakaoPaymentRequest = async (
 ) => {
   try {
     const responseUserData = await PortOne.requestPayment({
-      storeId: 'store-ffd209ec-d7d8-4d76-bc10-127bb89cc651',
+      storeId: 'store-9d87031f-513e-444c-95d0-341302227a19',
       totalAmount,
       channelKey: 'channel-key-18691381-0f3b-4160-9e46-e483e6ae1b5b',
-      paymentId: crypto.randomUUID().toString(),
+      paymentId: crypto.randomUUID(),
       orderName: '나이키 와플 트레이너 2 SD',
       currency: 'CURRENCY_KRW',
       payMethod: 'EASY_PAY',
