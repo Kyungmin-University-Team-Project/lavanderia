@@ -34,9 +34,11 @@ const Signup = () => {
     const [errors, setErrors] = useState<{ [key: string]: string }>({});
     const [isFocused, setIsFocused] = useState<{ [key: string]: boolean }>({});
     const [step, setStep] = useState(1);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [verificationCode, setVerificationCode] = useState('');
+    const [inputCode, setInputCode] = useState('');
 
     const inputRefs = useRef<Array<HTMLInputElement | null>>([]);
-
     useEffect(() => {
         const currentInput = inputRefs.current[step - 1];
         if (currentInput) {
@@ -141,8 +143,11 @@ const Signup = () => {
 
             console.log('Success:', response.data);
             window.alert('로그인 성공! 이메일 인증을 진행해 주세요.');
-            navigate('/'); // 홈으로 네비게이트
 
+            // 모달 열기
+            setIsModalOpen(true);
+
+            navigate('/'); // 홈으로 네비게이트
         } catch (error) {
             if (axios.isAxiosError(error)) {
                 console.error('Axios Error:', error.message);
@@ -152,6 +157,22 @@ const Signup = () => {
             } else {
                 console.error('Unexpected Error:', error);
             }
+        }
+    };
+
+    const handleVerifyEmail = async () => {
+        try {
+            const response = await axios.post(`${API_URL}/email-verify`, {
+                email: formData.memberEmail,
+                code: inputCode,
+            });
+            console.log('Verification success:', response.data);
+            alert('이메일 인증이 완료되었습니다!');
+            setIsModalOpen(false);
+            navigate('/login'); // 인증 후 로그인 페이지로 이동
+        } catch (error) {
+            console.error('Verification error:', error);
+            alert('인증 코드가 잘못되었습니다. 다시 시도해주세요.');
         }
     };
 
@@ -198,7 +219,7 @@ const Signup = () => {
 
           <div className="mt-5 w-full px-5">
               <p className="flex font-bold text-xl mb-10 text-center">
-                  {['이름을 입력해 주세요', '휴대폰 번호를 입력해 주세요', '이메일을 입력해 주세요', '아이디를 입력해 주세요', '비밀번호를 입력해 주세요', '비밀번호 확인을 입력해 주세요', '생년월일을 입력해 주세요'][step - 1]}
+                  {['이름을 입력해 주세요', '휴대폰 번호를 입력해 주세요', '이메일을 입력해 주세요','인증코드를 입력해주세요', '아이디를 입력해 주세요', '비밀번호를 입력해 주세요', '비밀번호 확인을 입력해 주세요', '생년월일을 입력해 주세요'][step - 1]}
               </p>
               <div className="flex flex-col gap-4">
                   {fieldNames.slice(0, step).map((field, index) => (
@@ -227,6 +248,27 @@ const Signup = () => {
                     </div>
                   ))}
               </div>
+
+              {/* 이메일 인증 모달 */}
+              {isModalOpen && (
+                  <div className="modal">
+                      <div className="modal-content">
+                          <h2>이메일 인증</h2>
+                          <p>{formData.memberEmail}로 전송된 인증 코드를 입력해주세요.</p>
+                          <input
+                              type="text"
+                              value={inputCode}
+                              onChange={(e) => setInputCode(e.target.value)}
+                              placeholder="인증 코드 입력"
+                          />
+                          <div className="modal-actions">
+                              <button onClick={() => setIsModalOpen(false)}>취소</button>
+                              <button onClick={handleVerifyEmail}>확인</button>
+                          </div>
+                      </div>
+                  </div>
+              )}
+
               <button
                 onClick={handleNextStep}
                 className={`w-full p-3 bg-blue-500 text-white font-bold rounded ${isButtonDisabled ? 'opacity-50 cursor-not-allowed' : ''}`}

@@ -26,7 +26,6 @@ const Community = () => {
       try {
         const response = await axios.get(`${API_URL}/community/`);
 
-        
         // TODO: 게시 시간 안보내짐
         console.log(response.data)
 
@@ -77,6 +76,7 @@ const Community = () => {
           ))}
         </div>
       </header>
+
 
       {/* TODO: 각 포스트에 대한 슬라이드 기능 추가*/}
 
