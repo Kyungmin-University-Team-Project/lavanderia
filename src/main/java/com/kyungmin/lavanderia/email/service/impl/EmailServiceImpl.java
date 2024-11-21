@@ -6,6 +6,7 @@ import com.kyungmin.lavanderia.member.exception.EmailSendFailedEx;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -17,12 +18,16 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.concurrent.TimeUnit;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class EmailServiceImpl implements EmailService {
 
     private final RedisTemplate<String, Object> redisTemplate;
     private final JavaMailSender javaMailSender;
+
+    private final String SIGNUP_CODE = "SignupCode:Email:";
+    private final String FIND_CODE = ":FindCode:Email:";
 
     // 회원가입 이메일 전송
     @Override
@@ -32,7 +37,7 @@ public class EmailServiceImpl implements EmailService {
         String subject = "하루세탁 회원가입 이메일 인증";
         String text = loadEmailTemplate(randomNumber);
 
-        String redisKey = "Email Authentication Code, Member Email : " + email;
+        String redisKey = SIGNUP_CODE + email;
         redisTemplate.opsForValue().set(redisKey, randomNumber, 5, TimeUnit.MINUTES);
 
         sendEmailUtil(email, subject, text);
@@ -42,7 +47,7 @@ public class EmailServiceImpl implements EmailService {
     @Override
     public void checkSignupCode(String email, String token) {
         try {
-            String redisKey = "Email Authentication Code, Member Email : " + email;
+            String redisKey = SIGNUP_CODE + email;
 
             String getToken = (String) redisTemplate.opsForValue().get(redisKey);
 
@@ -52,6 +57,7 @@ public class EmailServiceImpl implements EmailService {
                 throw new EmailAuthenticationFailedEx(email);
             }
         }catch (RuntimeException e){
+            log.error(email + " : Email Authentication Code is not found" + e.getMessage());
             throw new RuntimeException(email + " : Email Authentication Code is not found");
         }
 
@@ -63,7 +69,7 @@ public class EmailServiceImpl implements EmailService {
         String subject = "하루세탁 " + type  + " 찾기 인증번호";
         String text = "인증번호 : " + randomNumber;
 
-        String redisKey = "Find " + type  + " Number Code, Member Email : " + email;
+        String redisKey = type  + FIND_CODE + email;
         redisTemplate.opsForValue().set(redisKey, randomNumber, 5, TimeUnit.MINUTES);
 
         sendEmailUtil(email, subject, text);
@@ -72,7 +78,7 @@ public class EmailServiceImpl implements EmailService {
     @Override
     public void checkIdPwCode(String email, String token, String type) {
         try {
-            String redisKey = "Find " + type  + " Number Code, Member Email : " + email;
+            String redisKey = type  + FIND_CODE + email;
 
             String getToken = (String) redisTemplate.opsForValue().get(redisKey);
 
@@ -82,6 +88,7 @@ public class EmailServiceImpl implements EmailService {
                 throw new EmailAuthenticationFailedEx(email);
             }
         }catch (RuntimeException e){
+            log.error(email + " : Email Authentication Code is not found" + e.getMessage());
             throw new RuntimeException(email + " : Email Authentication Code is not found");
         }
 
@@ -98,6 +105,7 @@ public class EmailServiceImpl implements EmailService {
             mimeMessageHelper.setText(text, true); // 메일 본문 내용
             javaMailSender.send(mimeMessage);
         } catch (MessagingException e) {
+            log.error("Failed to send email" + e.getMessage());
             throw new EmailSendFailedEx(email);
         }
     }
@@ -109,6 +117,7 @@ public class EmailServiceImpl implements EmailService {
             String template = StreamUtils.copyToString(resource.getInputStream(), StandardCharsets.UTF_8);
             return String.format(template, randomNumber);
         } catch (IOException e) {
+            log.error("Failed to load email template" + e.getMessage());
             throw new RuntimeException("Failed to load email template", e);
         }
     }
