@@ -1,7 +1,7 @@
 -- Member 테이블에 더미 데이터 추가
 INSERT INTO TBL_MEMBER (MEMBER_ID, MEMBER_PWD, MEMBER_NAME, MEMBER_EMAIL, MEMBER_PHONE, MEMBER_LEVEL, MEMBER_POINT, AGREE_MARKETING_YN, ACC_INACTIVE_YN, TEMP_PWD_YN, ACC_LOGIN_COUNT, LOGIN_FAIL_COUNT, LAST_LOGIN_DATE, ACC_REGISTER_DATE, ACC_UPDATE_DATE, ACC_DELETE_DATE, PROFILE_IMG)
-VALUES ('user', '$2a$10$HdOg00x3nTNCO06RwdeiA.dsWWJlWLHpx9jM8qVnQp35H3cxjDfCy', 'User One', 'user1@example.com', '123456789', '1', '100', 'Y', 'N', 'N', 5, 0, '2024-05-31', '2024-05-31', '2024-05-31', NULL, 'defult'),
-       ('admin', '$2a$10$HdOg00x3nTNCO06RwdeiA.dsWWJlWLHpx9jM8qVnQp35H3cxjDfCy', 'User Two', 'user2@example.com', '987654321', '2', '200', 'Y', 'N', 'N', 10, 2, '2024-05-30', '2024-05-30','2024-05-31', NULL, 'defult');
+VALUES ('user', '$2a$10$HdOg00x3nTNCO06RwdeiA.dsWWJlWLHpx9jM8qVnQp35H3cxjDfCy', 'User One', 'user1@example.com', '123456789', 1, '100', 'Y', 'N', 'N', 5, 0, '2024-05-31', '2024-05-31', '2024-05-31', NULL, 'default'),
+       ('admin', '$2a$10$HdOg00x3nTNCO06RwdeiA.dsWWJlWLHpx9jM8qVnQp35H3cxjDfCy', 'User Two', 'user2@example.com', '987654321', 1, '200', 'Y', 'N', 'N', 10, 2, '2024-05-30', '2024-05-30','2024-05-31', NULL, 'default');
 
 INSERT INTO TBL_ROLE (ROLE_ID, AUTHORITIES, MEMBER_ID) VALUES (1, 'ROLE_USER', 'user');
 INSERT INTO TBL_ROLE (ROLE_ID, AUTHORITIES, MEMBER_ID) VALUES (2, 'ROLE_ADMIN', 'admin');
