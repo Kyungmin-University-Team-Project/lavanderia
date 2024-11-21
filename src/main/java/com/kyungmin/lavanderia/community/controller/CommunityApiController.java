@@ -1,11 +1,15 @@
-package com.kyungmin.lavanderia.board.controller;
+package com.kyungmin.lavanderia.community.controller;
 
-import com.kyungmin.lavanderia.board.data.dto.CommunityDTO;
-import com.kyungmin.lavanderia.board.data.dto.CommunityResponseDTO;
-import com.kyungmin.lavanderia.board.data.entity.Community;
-import com.kyungmin.lavanderia.board.service.CommunityService;
+import com.kyungmin.lavanderia.community.data.dto.CommunityDTO;
+import com.kyungmin.lavanderia.community.data.dto.CommunityResponseDTO;
+import com.kyungmin.lavanderia.community.data.entity.Community;
+import com.kyungmin.lavanderia.community.service.CommunityService;
 import com.kyungmin.lavanderia.member.data.entity.Member;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -14,8 +18,6 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -31,10 +33,12 @@ public class CommunityApiController {
     }
 
     @GetMapping("/")
-    public ResponseEntity<?> findAll() {
-        List<Community> communities = communityService.findAll();
-        return ResponseEntity.ok(communities.stream().map(CommunityResponseDTO::new).collect(Collectors.toList()));
+    public ResponseEntity<?> findAll(@PageableDefault(size = 10, sort = "communityId", direction = Sort.Direction.DESC) Pageable pageable) {
+        Page<Community> communities = communityService.findAll(pageable);
+        Page<CommunityResponseDTO> response = communities.map(CommunityResponseDTO::new);
+        return ResponseEntity.ok(response);
     }
+
 
     @PostMapping("/delete/{id}")
     public ResponseEntity<String> delete(@PathVariable Long id, @AuthenticationPrincipal Member member) {

@@ -1,10 +1,13 @@
-package com.kyungmin.lavanderia.board.data.dto;
+package com.kyungmin.lavanderia.community.data.dto;
 
-import com.kyungmin.lavanderia.board.data.entity.Community;
+import com.kyungmin.lavanderia.community.data.entity.Community;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Data
 @Builder
@@ -18,6 +21,7 @@ public class CommunityResponseDTO {
     private Integer viewCount;
     private String category;
     private String image;
+    private List<CommentDto> comments;
 
     public CommunityResponseDTO(Community community) {
         this.communityId = community.getCommunityId();
@@ -27,5 +31,8 @@ public class CommunityResponseDTO {
         this.viewCount = community.getViewCount();
         this.category = community.getCategory();
         this.image = community.getImage();
+        this.comments = community.getCommunityComment().stream()
+                .map(CommentDto::new)
+                .collect(Collectors.toList());
     }
 }

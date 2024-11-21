@@ -1,11 +1,17 @@
-package com.kyungmin.lavanderia.board.data.entity;
+package com.kyungmin.lavanderia.community.data.entity;
 
 import com.kyungmin.lavanderia.global.entity.TimeLog;
 import com.kyungmin.lavanderia.member.data.entity.Member;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Entity
+
 @Data
 @Builder
 @NoArgsConstructor
@@ -36,5 +42,8 @@ public class Community extends TimeLog {
 
     @Column(name = "IMAGE")
     private String image;
+
+    @OneToMany(mappedBy = "community", cascade = CascadeType.ALL)
+    private List<CommunityComment> communityComment;
 
 }
