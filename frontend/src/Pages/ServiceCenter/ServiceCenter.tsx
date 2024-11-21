@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import story from "../../Assets/Img/customer_02.de69bf86.png";
 import { faqs } from '../../Typings/Service/Faq';
+import {Link} from "react-router-dom";
 
 const ServiceCenter: React.FC = () => {
     const [openFAQ, setOpenFAQ] = useState<number | null>(null);
@@ -24,6 +25,11 @@ const ServiceCenter: React.FC = () => {
                 </div>
             </article>
             <article className='mt-12'>
+                <div>
+                    <Link to='inquiry'>
+                        <button className="cursor-pointer text-sm font-bold mb-6">1대1 문의하기</button>
+                    </Link>
+                </div>
                 <div>
                     <h1 className='text-2xl font-bold mb-6'>자주 묻는 질문</h1>
                 </div>
