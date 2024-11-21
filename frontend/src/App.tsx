@@ -37,6 +37,7 @@ import ChangeDeliveryAddressManagement from "./Pages/mypage/ChangeDeliveryAddres
 import Repair from "./Pages/application/Repair";
 import RepairCategory from "./Pages/application/RepairCategory";
 import RepairDetail from "./Pages/application/RepairDetail";
+import Inquiry from "./Pages/mypage/Inquiry";
 
 function App() {
     return (
@@ -65,6 +66,7 @@ function App() {
                                element={<ChangeDeliveryAddressManagement/>}/>
                         <Route path="paymentManagement" element={<PaymentManagement/>}/>
                         <Route path="notificationsettings" element={<Notificationsettings/>}/>
+                        <Route path="mypage" element={<Inquiry/>}/>
                     </Route>
                     {/* 로그인 불필요 페이지! */}
                     {/*커뮤니티*/}
@@ -74,6 +76,7 @@ function App() {
                     <Route path="/community/write" element={<CommunityWrite/>}/>
                     {/*중고장터*/}
                     <Route path="secondhand" element={<SecondhandProduct/>}/>
+
                     <Route
                         path="secondhand/:id"
                         element={<SecondhandProductItemDetail/>}
@@ -91,6 +94,7 @@ function App() {
                         element={<SecondhandDeliveryBuy/>}
                     />
                     <Route path="servicecenter" element={<ServiceCenter/>}/>
+                    <Route path='serviceCenter/inquiry' element={<Inquiry/>}/>
                     <Route
                         path="secondhand/:id/secondPayment"
                         element={<SecondPayment/>}
