@@ -86,17 +86,17 @@ public class MemberServiceImpl implements MemberService {
     // 회원정보 조회
     @Override
     public MemberInfoDTO memberInfo(Member member) {
-
+        Member memberEntity = memberRepository.findById(member.getMemberId()).orElseThrow(() -> new UsernameNotFoundException("회원을 찾을 수 없습니다."));
         return MemberInfoDTO.builder()
-                .memberId(member.getMemberId())
-                .memberName(member.getMemberName())
-                .memberEmail(member.getMemberEmail())
-                .memberPhone(member.getMemberPhone())
-                .memberBirth(String.valueOf(member.getMemberBirth()))
-                .memberLevel(member.getMemberLevel())
-                .memberPoint(member.getMemberPoint())
-                .agreeMarketingYn(member.getAgreeMarketingYn())
-                .memberProfileImg(member.getMemberProfileImg())
+                .memberId(memberEntity.getMemberId())
+                .memberName(memberEntity.getMemberName())
+                .memberEmail(memberEntity.getMemberEmail())
+                .memberPhone(memberEntity.getMemberPhone())
+                .memberBirth(String.valueOf(memberEntity.getMemberBirth()))
+                .memberLevel(memberEntity.getMemberLevel())
+                .memberPoint(memberEntity.getMemberPoint())
+                .agreeMarketingYn(memberEntity.getAgreeMarketingYn())
+                .memberProfileImg(memberEntity.getMemberProfileImg())
                 .build();
     }
 
