@@ -54,17 +54,18 @@ function App() {
                         <Route path="repair" element={<Repair />} />
                         <Route path="repair/:category" element={<RepairCategory />} />
                         <Route path="repair/:category/detail" element={<RepairDetail />} />
+
                         <Route path="mypage" element={<MyPage/>}>
-                            <Route path="changeMemberInformation" element={<ChangeMemberInformation/>}/>
-                            <Route path="changePassword" element={<ChangePassword/>}/>
-                            <Route path="orderDetails" element={<OrderDetails/>}/>
-                            <Route path="cancellationDetails" element={<CancellationDetails/>}/>
-                            <Route path="deliveryAddressManagement" element={<DeliveryAddressManagement/>}/>
-                            <Route path="deliveryAddressManagement/ChangeDeliveryAddressManagement"
-                                   element={<ChangeDeliveryAddressManagement/>}/>
-                            <Route path="paymentManagement" element={<PaymentManagement/>}/>
-                            <Route path="notificationsettings" element={<Notificationsettings/>}/>
                         </Route>
+                        <Route path="mypage/changeMemberInformation" element={<ChangeMemberInformation/>}/>
+                        <Route path="mypage/changePassword" element={<ChangePassword/>}/>
+                        <Route path="mypage/orderDetails" element={<OrderDetails/>}/>
+                        <Route path="mypage/cancellationDetails" element={<CancellationDetails/>}/>
+                        <Route path="mypage/deliveryAddressManagement" element={<DeliveryAddressManagement/>}/>
+                        <Route path="mypage/deliveryAddressManagement/ChangeDeliveryAddressManagement"
+                               element={<ChangeDeliveryAddressManagement/>}/>
+                        <Route path="mypage/paymentManagement" element={<PaymentManagement/>}/>
+                        <Route path="mypage/notificationsettings" element={<Notificationsettings/>}/>
                     </Route>
                     {/* 로그인 불필요 페이지! */}
                     {/*커뮤니티*/}
