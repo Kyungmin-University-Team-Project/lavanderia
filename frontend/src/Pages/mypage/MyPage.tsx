@@ -153,7 +153,7 @@ const MyPage = () => {
               <p className="mb-2 text-sm font-bold">회원정보 변경</p>
               <Link to="changeMemberInformation">
                 <p className="text-sm text-gray-300 underline">
-                  <FaAngleRight />
+                  <FaAngleRight/>
                 </p>
               </Link>
             </li>
@@ -162,7 +162,7 @@ const MyPage = () => {
               <p className="text-sm font-bold">비밀번호 변경</p>
               <Link to="changePassword">
                 <p className="text-sm text-gray-300">
-                  <FaAngleRight />
+                  <FaAngleRight/>
                 </p>
               </Link>
             </li>
@@ -170,7 +170,7 @@ const MyPage = () => {
               <p className="text-sm font-bold">주문 내역</p>
               <Link to="orderDetails">
                 <p className="text-sm text-gray-300">
-                  <FaAngleRight />
+                  <FaAngleRight/>
                 </p>
               </Link>
             </li>
@@ -178,7 +178,15 @@ const MyPage = () => {
               <p className="text-sm font-bold">배송지 관리</p>
               <Link to="deliveryAddressManagement">
                 <p className="text-sm text-gray-300">
-                  <FaAngleRight />
+                  <FaAngleRight/>
+                </p>
+              </Link>
+            </li>
+            <li className="flex justify-between border-b-2 border-solid border-gray-50 pb-4">
+              <p className="text-sm font-bold">문의 내용</p>
+              <Link to="inquiryDetails">
+                <p className="text-sm text-gray-300">
+                  <FaAngleRight/>
                 </p>
               </Link>
             </li>
