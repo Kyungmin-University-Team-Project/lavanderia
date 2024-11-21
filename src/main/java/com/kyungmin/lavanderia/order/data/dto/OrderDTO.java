@@ -1,6 +1,6 @@
 package com.kyungmin.lavanderia.order.data.dto;
 
-import com.kyungmin.lavanderia.order.data.dto.OrderDetailDTO.OrderDetailInsert;
+import com.kyungmin.lavanderia.order.data.dto.OrderDetailDTO.InsertOrderDetail;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -19,7 +19,7 @@ public class OrderDTO {
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class OrderInsert {
+    public static class InsertOrder {
 
         @Schema(description = "수령인 이름", example = "홍길동")
         private String rcvrName;
@@ -40,7 +40,7 @@ public class OrderDTO {
         private String dlvrReqMessage;
 
         @Schema(description = "주문 상세 정보")
-        private List<OrderDetailInsert> orderDetailList;
+        private List<InsertOrderDetail> orderDetailList;
 
     }
 
