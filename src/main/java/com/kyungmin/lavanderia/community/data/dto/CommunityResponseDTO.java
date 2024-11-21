@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -16,6 +17,7 @@ import java.util.stream.Collectors;
 public class CommunityResponseDTO {
     private Long communityId;
     private String memberId;
+    private LocalDateTime createdDate;
     private String title;
     private String content;
     private Integer viewCount;
@@ -26,6 +28,7 @@ public class CommunityResponseDTO {
     public CommunityResponseDTO(Community community) {
         this.communityId = community.getCommunityId();
         this.memberId = community.getMember().getMemberId();
+        this.createdDate = community.getCreatedAt();
         this.title = community.getTitle();
         this.content = community.getContent();
         this.viewCount = community.getViewCount();
