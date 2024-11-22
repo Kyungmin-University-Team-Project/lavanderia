@@ -43,10 +43,14 @@ public class MemberServiceImpl implements MemberService {
                 .memberPhone(signupDto.getMemberPhone())
                 .agreeMarketingYn(signupDto.getAgreeMarketingYn())
                 .memberBirth(signupDto.getMemberBirth())
+                .accInactiveYn("N")
+                .tempPwdYn("N")
+                .memberProfileImg("default")
+                .memberLevel(1)
+                .memberPoint(0)
                 .build();
 
         memberRepository.save(member);
-
         // 회원 권한 저장
         Role role = Role.builder().
                 authorities("ROLE_USER")
