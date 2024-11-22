@@ -18,6 +18,7 @@ public class CommentDto {
 
     private Long commentId;
     private String memberId;
+    private String profileImg;
     private String content;
     private LocalDateTime createdDate;
 
@@ -33,6 +34,7 @@ public class CommentDto {
         return CommentDto.builder()
                 .commentId(comment.getCommentId())
                 .memberId(comment.getMember().getMemberId())
+                .profileImg(comment.getMember().getMemberProfileImg())
                 .content(comment.getContent())
                 .createdDate(comment.getCreatedAt())
                 .build();

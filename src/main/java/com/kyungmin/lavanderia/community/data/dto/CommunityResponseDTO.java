@@ -21,6 +21,7 @@ public class CommunityResponseDTO {
     private Integer viewCount;
     private String category;
     private String image;
+    private String profileImg;
 
     public CommunityResponseDTO(Community community) {
         this.communityId = community.getCommunityId();
@@ -31,5 +32,6 @@ public class CommunityResponseDTO {
         this.viewCount = community.getViewCount();
         this.category = community.getCategory();
         this.image = community.getImage();
+        this .profileImg = community.getMember().getMemberProfileImg();
     }
 }
