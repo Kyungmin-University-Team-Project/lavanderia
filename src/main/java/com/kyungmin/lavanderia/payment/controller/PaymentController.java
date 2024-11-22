@@ -103,7 +103,6 @@ public class PaymentController {
              */
             System.out.println("Response from Flask server: " + response.getBody());
             return ResponseEntity.ok("결과값 : " + response.getBody());
-
         } catch (Exception e) {
             System.err.println("Error processing image: " + e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error processing image: " + e.getMessage());

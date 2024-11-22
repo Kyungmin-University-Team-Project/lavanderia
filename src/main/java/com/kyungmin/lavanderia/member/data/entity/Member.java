@@ -3,6 +3,8 @@ package com.kyungmin.lavanderia.member.data.entity;
 import com.kyungmin.lavanderia.address.data.entity.Address;
 import com.kyungmin.lavanderia.cart.data.entity.Cart;
 import com.kyungmin.lavanderia.order.data.entity.Order;
+import com.kyungmin.lavanderia.repair.data.entity.Repair;
+import com.kyungmin.lavanderia.repair.data.entity.RepairCart;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
@@ -93,6 +95,12 @@ public class Member implements UserDetails {
 
     @OneToMany(mappedBy = "memberId", cascade = CascadeType.ALL)
     List<Order> order; // 주문
+
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Repair> repairs = new ArrayList<>();
+
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<RepairCart> repairCarts = new ArrayList<>();
 
     @PrePersist
     protected void onCreate() {
