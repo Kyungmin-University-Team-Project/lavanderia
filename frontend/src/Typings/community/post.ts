@@ -12,7 +12,6 @@ export interface Post {
   memberId: string;
   title: string;
   content: string;
-  viewCount: number;
   image:string
   category: string;
   avatar: string
