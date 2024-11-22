@@ -21,18 +21,20 @@ public class CommentDto {
     private String content;
     private LocalDateTime createdDate;
 
-    public CommentDto(CommunityComment comment) {
-        this.commentId = comment.getCommentId();
-        this.content = comment.getContent();
-        this.memberId = comment.getMember().getMemberId();
-        this.createdDate = comment.getCreatedAt();
-    }
-
     public static CommunityComment toEntity(Member member, Community community, CommentDto commentDto) {
         return CommunityComment.builder()
                 .member(member)
                 .community(community)
                 .content(commentDto.getContent())
+                .build();
+    }
+
+    public static CommentDto toEntity(CommunityComment comment) {
+        return CommentDto.builder()
+                .commentId(comment.getCommentId())
+                .memberId(comment.getMember().getMemberId())
+                .content(comment.getContent())
+                .createdDate(comment.getCreatedAt())
                 .build();
     }
 
