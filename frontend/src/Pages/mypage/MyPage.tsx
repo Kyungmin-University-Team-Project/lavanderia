@@ -14,6 +14,7 @@ interface MemberInfo {
   memberLevel: string
   memberId: string
   agreeMarketingYn: string
+  memberProfileImg: string// 프로필 이미지 추가
 }
 
 interface Profile {
@@ -30,6 +31,7 @@ const MyPage = () => {
     memberLevel: '',
     memberId: '',
     agreeMarketingYn: '',
+    memberProfileImg: '', // 초기값
   })
   const { logout } = useContext(AuthContext)
   const [filed, setFile] = useState<Profile>({ profileImg: null })
@@ -38,32 +40,32 @@ const MyPage = () => {
   useEffect(() => {
     const memberPost = async () => {
       try {
-        const response = await axiosInstance.post(`${API_URL}/member-info`)
-        const data = response.data
-        setList(data)
+        const response = await axiosInstance.post(`${API_URL}/member-info`);
+        const data = response.data;
+        setList(data);
+        console.log(data);
       } catch (e: any) {
         if (e.response) {
-          console.log('Response data:', e.response.data)
+          console.log('Response data:', e.response.data);
         }
       }
-    }
-    memberPost()
-  }, [])
+    };
+    memberPost();
+  }, []); // 의존성 배열 비움
 
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { files, type } = e.target
 
     if (type === 'file' && files) {
       const selectedFile = files[0]
+      console.log(selectedFile)
       setFile({ profileImg: selectedFile })
     }
   }
 
   const handleOnSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-
     if (!filed.profileImg) {
-      console.log('No file selected')
       return
     }
 
@@ -71,18 +73,26 @@ const MyPage = () => {
     newForm.append('profileImg', filed.profileImg)
 
     try {
-      const response = await axiosInstance.post('/member-profile', newForm, {
+      await axiosInstance.post('/member-profile', newForm, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
       })
 
-      console.log(response.data)
-      setModalOpen(false) // Close modal after successful upload
+      if (list.memberProfileImg) {
+        setList((prevList) => ({
+          ...prevList,
+          memberProfileImg: list.memberProfileImg, // 프로필 이미지 업데이트
+        }))
+      } else {
+        console.error('Profile image URL not found in response')
+      }
+      setModalOpen(false)
     } catch (error) {
       console.error('Error during file upload:', error)
     }
   }
+
 
   return (
       <div className="w-full border-b-2 border-l-2 border-r border-gray-50 bg-white">
@@ -90,9 +100,12 @@ const MyPage = () => {
           <div className="flex items-center">
             <div className="h-16 w-16 overflow-hidden rounded-full border-b-2">
               <img
-                  src="/img/basic.png"
-                  alt="Profile"
-                  className="h-full w-full object-cover"
+                  src={`${list.memberProfileImg}?${new Date().getTime()}`}
+                  alt="profile"
+                  onError={(e) => {
+                    const target = e.target as HTMLImageElement;
+                    target.src = "/img/basic.png";
+                  }}
               />
             </div>
             <div className="ml-4">
