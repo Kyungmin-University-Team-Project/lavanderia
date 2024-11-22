@@ -32,13 +32,12 @@ public class CommunityApiController {
         return response(HttpStatus.OK, "save");
     }
 
-    @GetMapping("/")
-    public ResponseEntity<?> findAll(@PageableDefault(size = 10, sort = "communityId", direction = Sort.Direction.DESC) Pageable pageable) {
-        Page<Community> communities = communityService.findAll(pageable);
+    @GetMapping("/category")
+    public ResponseEntity<?> findByCategory(@RequestParam String category, @PageableDefault(size = 10, sort = "communityId", direction = Sort.Direction.DESC) Pageable pageable) {
+        Page<Community> communities = communityService.findByCategory(category, pageable);
         Page<CommunityResponseDTO> response = communities.map(CommunityResponseDTO::new);
         return ResponseEntity.ok(response);
     }
-
 
     @PostMapping("/delete/{id}")
     public ResponseEntity<String> delete(@PathVariable Long id, @AuthenticationPrincipal Member member) {
@@ -50,13 +49,6 @@ public class CommunityApiController {
     public ResponseEntity<String> update(@PathVariable Long id, CommunityDTO communityDTO, @AuthenticationPrincipal Member member) {
         communityService.update(id, communityDTO, member.getMemberId());
         return response(HttpStatus.OK, "update");
-    }
-
-    @GetMapping("/category")
-    public ResponseEntity<?> findByCategory(@RequestParam String category, @PageableDefault(size = 10, sort = "communityId", direction = Sort.Direction.DESC) Pageable pageable) {
-        Page<Community> communities = communityService.findByCategory(category, pageable);
-        Page<CommunityResponseDTO> response = communities.map(CommunityResponseDTO::new);
-        return ResponseEntity.ok(response);
     }
 
     public ResponseEntity<String> response(HttpStatus httpStatus, String result) {
