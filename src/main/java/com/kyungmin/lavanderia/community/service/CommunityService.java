@@ -16,4 +16,6 @@ public interface CommunityService {
     void delete(Long id, String memberId);
 
     void update(Long id, CommunityDTO communityDTO, String memberId);
+
+    Page<Community> findByCategory(String category, Pageable pageable);
 }
