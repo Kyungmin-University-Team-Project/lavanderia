@@ -2,15 +2,16 @@ package com.kyungmin.lavanderia.global.auth.jwt.controller;
 
 import com.kyungmin.lavanderia.global.auth.jwt.service.ReissueService;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+@Slf4j
 @RestController
 public class ReissueController {
 
@@ -27,6 +28,12 @@ public class ReissueController {
             @ApiResponse(responseCode = "400", description = "Refresh token 재발급 실패"),
     })
     public ResponseEntity<?> reissue(HttpServletRequest request, HttpServletResponse response) {
-        return reissueService.reissue(request, response);
+        try {
+            log.info("Refresh token 재발급");
+            return reissueService.reissue(request, response);
+        } catch (Exception e) {
+            log.error("Refresh token 재발급 실패: {}", e.getMessage());
+            return ResponseEntity.badRequest().body("Refresh token 재발급 실패: " + e.getMessage());
+        }
     }
 }
