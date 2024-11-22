@@ -85,7 +85,13 @@ public class CommunityServiceImpl implements CommunityService {
 
     @Override
     public Page<Community> findByCategory(String category, Pageable pageable) {
-        return communityRepository.findByCategory(category, pageable);
+
+        if (category.equals("전체")) {
+            return communityRepository.findAll(pageable);
+        } else {
+            return communityRepository.findByCategory(category, pageable);
+        }
+
     }
 
 }
