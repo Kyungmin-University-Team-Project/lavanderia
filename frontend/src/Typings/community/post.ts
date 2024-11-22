@@ -8,7 +8,7 @@ export interface Comment {
 
 export interface Post {
   communityId: number;
-  createdAt:string;
+  createdDate:string;
   memberId: string;
   title: string;
   content: string;

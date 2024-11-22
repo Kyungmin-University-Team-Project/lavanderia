@@ -3,7 +3,6 @@ import { useLocation } from 'react-router-dom'
 import { Post, Comment } from '../../Typings/community/post'
 import BackButton from "../../Components/common/BackButton";
 
-// 임시 댓글 데이터
 const commentsData: { [key: number]: Comment[] } = {
   1: [
     { id: 1, author: 'User1', content: '좋은 글이네요!', avatar: 'https://via.placeholder.com/40' },
@@ -66,7 +65,6 @@ const PostDetail: React.FC = () => {
   return (
     <div className="max-w-2xl mx-auto h-full">
       <div className="bg-white p-6">
-        <BackButton/>
         <div className="flex items-center mb-4">
           <div className="bg-gray-200 w-12 h-12 rounded-full overflow-hidden">
             <img src={post.avatar} alt={post.memberId} className="w-full h-full object-cover" />

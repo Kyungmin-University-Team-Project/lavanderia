@@ -1,5 +1,5 @@
 import React from 'react';
-import {FaArrowLeft} from "react-icons/fa";
+import {FiArrowLeft} from "react-icons/fi";
 import {useNavigate} from "react-router-dom";
 
 const BackButton = () => {
@@ -10,11 +10,9 @@ const BackButton = () => {
     };
 
     return (
-        <div className="flex justify-between items-center mb-4">
-            <button onClick={handleBackClick} className="text-gray-600 text-xl cursor-pointer">
-                <FaArrowLeft/>
-            </button>
-        </div>
+        <button onClick={handleBackClick} className="text-black text-2xl cursor-pointer">
+            <FiArrowLeft/>
+        </button>
     );
 };
 
