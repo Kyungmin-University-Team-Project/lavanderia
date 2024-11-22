@@ -1,0 +1,15 @@
+Metadata-Version: 2.1
+Name: TRACER
+Version: 0.1
+License-File: LICENSE
+Requires-Dist: torch
+Requires-Dist: torchvision
+Requires-Dist: opencv-python
+Requires-Dist: numpy
+Requires-Dist: albumentations
+Requires-Dist: tqdm
+Requires-Dist: scikit-learn
+Requires-Dist: fastapi
+Requires-Dist: python-multipart
+Requires-Dist: uvicorn
+Requires-Dist: httpx
