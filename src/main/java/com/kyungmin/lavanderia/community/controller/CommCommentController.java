@@ -6,6 +6,8 @@ import com.kyungmin.lavanderia.member.data.entity.Member;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +19,12 @@ import org.springframework.web.bind.annotation.*;
 public class CommCommentController {
 
     private final CommCommentService commCommentService;
+
+    @GetMapping("/post/{communityId}")
+    @Operation(summary = "댓글 조회", description = "커뮤니티 게시글의 댓글을 조회합니다.")
+    public ResponseEntity<?> getAllComment(@PathVariable Long communityId, @PageableDefault Pageable pageable) {
+        return ResponseEntity.ok(commCommentService.getAllComment(communityId, pageable));
+    }
 
     @PostMapping("/post/{communityId}/comment")
     @Operation(summary = "댓글 등록", description = "커뮤니티 게시글에 댓글을 등록합니다. (로그인 필요)")

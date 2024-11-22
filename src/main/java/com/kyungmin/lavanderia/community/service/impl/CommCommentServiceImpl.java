@@ -8,6 +8,8 @@ import com.kyungmin.lavanderia.community.repository.CommunityRepository;
 import com.kyungmin.lavanderia.community.service.CommCommentService;
 import com.kyungmin.lavanderia.member.data.entity.Member;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -15,8 +17,13 @@ import org.springframework.stereotype.Service;
 public class CommCommentServiceImpl implements CommCommentService {
 
     private final CommCommentRepository commCommentRepository;
+
     private final CommunityRepository communityRepository;
 
+    public Page<CommentDto> getAllComment(Long communityId, Pageable pageable) {
+        return commCommentRepository.findByCommunityCommunityId(communityId, pageable)
+                .map(CommentDto::toEntity);
+    }
 
     @Override
     public void addComment(Member member, Long communityId, CommentDto commentDto) {
