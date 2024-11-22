@@ -5,6 +5,7 @@ import {Post} from '../../Typings/community/post';
 import {API_URL} from "../../Api/api";
 import {ClipLoader} from "react-spinners";
 import ActionBar from "./ActionBar";
+import {formatTime} from "../../Utils/common/formatTime";
 
 const tabs = [
     {name: '전체', active: true},
@@ -90,22 +91,6 @@ const Community = () => {
         navigate('/community/write');
     };
 
-    // 게시글 작성 시간계산
-    const formatTime = (createdDate: string): string => {
-        const now = new Date();
-        const created = new Date(new Date(createdDate).getTime() + 9 * 60 * 60 * 1000); // UTC -> KST 변환
-        const diffInSeconds = Math.floor((now.getTime() - created.getTime()) / 1000);
-        const diffInMinutes = Math.floor(diffInSeconds / 60);
-        const diffInHours = Math.floor(diffInMinutes / 60);
-        const diffInDays = Math.floor(diffInHours / 24);
-        const diffInMonths = Math.floor(diffInDays / 30);
-
-        if (diffInSeconds < 60) return `${diffInSeconds}초 전`;
-        if (diffInMinutes < 60) return `${diffInMinutes}분 전`;
-        if (diffInHours < 24) return `${diffInHours}시간 전`;
-        if (diffInDays < 30) return `${diffInDays}일 전`;
-        return `${diffInMonths}달 전`;
-    };
 
     const handleTabClick = (tabName: string) => {
         setActiveTab(tabName); // 선택된 탭으로 변경
@@ -166,7 +151,7 @@ const Community = () => {
                 ref={footerRef}
             >
                 {isLoading && <ClipLoader size={40} color={"#6e6e6e"}/>}
-                {!hasMore && <div className="text-gray-500">더 이상 데이터가 없습니다.</div>}
+                {!hasMore && <div className="text-gray-500">모든 피드를 확인하셨어요! 피드를 작성해주세요!</div>}
             </footer>
 
             <button
