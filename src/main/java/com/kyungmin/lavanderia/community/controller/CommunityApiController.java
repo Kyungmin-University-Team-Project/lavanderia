@@ -52,6 +52,13 @@ public class CommunityApiController {
         return response(HttpStatus.OK, "update");
     }
 
+    @GetMapping("/category")
+    public ResponseEntity<?> findByCategory(@RequestParam String category, @PageableDefault(size = 10, sort = "communityId", direction = Sort.Direction.DESC) Pageable pageable) {
+        Page<Community> communities = communityService.findByCategory(category, pageable);
+        Page<CommunityResponseDTO> response = communities.map(CommunityResponseDTO::new);
+        return ResponseEntity.ok(response);
+    }
+
     public ResponseEntity<String> response(HttpStatus httpStatus, String result) {
         return ResponseEntity.status(httpStatus)
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.TEXT_PLAIN_VALUE + ";charset=UTF-8")
