@@ -44,3 +44,4 @@ application.yml
 lavanderia-421805-157140079398.json
 database.properties
 frontend/.env
+logs/*.log

@@ -1,6 +1,6 @@
-package com.kyungmin.lavanderia.board.data.dto;
+package com.kyungmin.lavanderia.community.data.dto;
 
-import com.kyungmin.lavanderia.board.data.entity.Community;
+import com.kyungmin.lavanderia.community.data.entity.Community;
 import com.kyungmin.lavanderia.member.data.entity.Member;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
