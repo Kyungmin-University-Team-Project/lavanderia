@@ -83,4 +83,9 @@ public class CommunityServiceImpl implements CommunityService {
             }
     }
 
+    @Override
+    public Page<Community> findByCategory(String category, Pageable pageable) {
+        return communityRepository.findByCategory(category, pageable);
+    }
+
 }
