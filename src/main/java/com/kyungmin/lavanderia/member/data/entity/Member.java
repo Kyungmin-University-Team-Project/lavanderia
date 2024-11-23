@@ -2,6 +2,7 @@ package com.kyungmin.lavanderia.member.data.entity;
 
 import com.kyungmin.lavanderia.address.data.entity.Address;
 import com.kyungmin.lavanderia.cart.data.entity.Cart;
+import com.kyungmin.lavanderia.lifeLaundry.data.entity.LifeLaundryCart;
 import com.kyungmin.lavanderia.order.data.entity.Order;
 import com.kyungmin.lavanderia.repair.data.entity.Repair;
 import com.kyungmin.lavanderia.repair.data.entity.RepairCart;
@@ -101,6 +102,9 @@ public class Member implements UserDetails {
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<RepairCart> repairCarts = new ArrayList<>();
+
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<LifeLaundryCart> lifeLaundryCarts = new ArrayList<>();
 
     @PrePersist
     protected void onCreate() {
