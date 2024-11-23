@@ -1,17 +1,21 @@
-// 게시글 작성 시간계산 (한국 시간 기준)
+import { format, addHours} from 'date-fns';
+
 export const formatTime = (createdDate: string): string => {
-    const now = new Date();
-    const created = new Date(new Date(createdDate).getTime() + 9 * 60 * 60 * 1000); // UTC -> KST 변환
-    const diffInSeconds = Math.floor((now.getTime() - created.getTime()) / 1000); // 차이를 초 단위로 계산
+    try {
+        const date = new Date(createdDate);
 
-    const diffInMinutes = Math.floor(diffInSeconds / 60);
-    const diffInHours = Math.floor(diffInMinutes / 60);
-    const diffInDays = Math.floor(diffInHours / 24);
-    const diffInMonths = Math.floor(diffInDays / 30);
+        // 기본 KST 변환 및 차이 계산
+        const kstDate = addHours(date, 9); // UTC → KST 변환
+        const now = new Date();
+        const diffInSeconds = Math.floor((now.getTime() - kstDate.getTime()) / 1000);
 
-    if (diffInSeconds < 60) return `${diffInSeconds}초 전`;
-    if (diffInMinutes < 60) return `${diffInMinutes}분 전`;
-    if (diffInHours < 24) return `${diffInHours}시간 전`;
-    if (diffInDays < 30) return `${diffInDays}일 전`;
-    return `${diffInMonths}달 전`;
+        if (diffInSeconds < 60) return `${diffInSeconds}초 전`;
+        if (diffInSeconds < 3600) return `${Math.floor(diffInSeconds / 60)}분 전`;
+        if (diffInSeconds < 86400) return `${Math.floor(diffInSeconds / 3600)}시간 전`;
+        if (diffInSeconds < 2592000) return `${Math.floor(diffInSeconds / 86400)}일 전`;
+        return format(kstDate, "yyyy년 MM월 dd일");
+    } catch (error) {
+        console.error("날짜 포맷팅 오류:", error);
+        return "날짜 오류";
+    }
 };

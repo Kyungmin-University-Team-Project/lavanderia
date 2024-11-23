@@ -4,6 +4,7 @@ import axios from 'axios';
 import Logo from "../../Components/common/Logo";
 import {API_URL} from "../../Api/api";
 import axiosInstance from "../../Utils/axios/axiosInstance";
+import LoadingSpinner from "../../Components/common/LoadingSpinner";
 
 interface FormData {
     memberName: string;
@@ -17,6 +18,8 @@ interface FormData {
 }
 
 const fieldNames: (keyof FormData)[] = ['memberName', 'memberPhone', 'memberEmail', 'memberId', 'memberPwd', 'confirmPassword', 'memberBirth'];
+
+// 로딩 스피너 컴포넌트
 
 const Signup = () => {
     const location = useLocation();
@@ -40,6 +43,9 @@ const Signup = () => {
     const inputRefs = useRef<Array<HTMLInputElement | null>>([]);
     const [isCooldown, setIsCooldown] = useState(false);
     const [cooldownTime, setCooldownTime] = useState(0);
+    const [isLoading, setIsLoading] = useState(false); // 로딩 상태 추가
+    const [isEmailVerified, setIsEmailVerified] = useState(false); // 이메일 인증 상태 추가
+
 
 
     useEffect(() => {
@@ -146,68 +152,57 @@ const Signup = () => {
         }
     }, [cooldownTime]);
 
+    // 이메일 인증 코드 발송
     const handleSendEmailCode = async () => {
-        if (isCooldown) return; // Prevent multiple clicks during cooldown
-
+        setIsLoading(true);
         try {
-            const response = await axiosInstance.post(`${API_URL}/send-signup-code`, formData.memberEmail);
-            console.log('Email sent successfully:', response.data);
-
-            alert('인증 코드가 이메일로 전송되었습니다.');
-
-            setIsCooldown(true);
-            setCooldownTime(30);
+            await axiosInstance.post(`${API_URL}/send-signup-code`, formData.memberEmail);
+            alert("인증 코드가 이메일로 전송되었습니다.");
         } catch (error) {
-            console.error('Error sending email:', error);
-            alert('이메일 전송 중 문제가 발생했습니다. 다시 시도해주세요.');
+            alert("이메일 전송 중 문제가 발생했습니다. 다시 시도해주세요.");
+        } finally {
+            setIsLoading(false);
         }
     };
 
-    // 회원가입 api
+    // 회원가입 처리
     const handleSubmit = async () => {
+        setIsLoading(true);
         try {
+            console.log(formData)
+
             const cleanedFormData = {
                 ...formData,
-                memberPhone: formData.memberPhone.split(' ').join(''),
+                memberPhone: formData.memberPhone.replace(/\D/g, ""),
             };
 
-            // 회원가입 로직
-            const response = await axios.post(`${API_URL}/signup`, cleanedFormData);
-            navigate('/'); // 홈으로 네비게이트
-
+            await axiosInstance.post(`${API_URL}/signup`, cleanedFormData);
+            alert("회원가입이 완료되었습니다!");
         } catch (error) {
-            if (axios.isAxiosError(error)) {
-                console.error('Axios Error:', error.message);
-                if (error.response) {
-                    console.error('Server responded with:', error.response.data);
-                }
-            } else {
-                console.error('Unexpected Error:', error);
-            }
+            alert("회원가입 중 문제가 발생했습니다. 다시 시도해주세요.");
+        } finally {
+            setIsLoading(false);
         }
     };
 
+    // 이메일 인증
     const handleVerifyEmail = async () => {
-        console.log(inputCode, formData.memberEmail,)
+        setIsLoading(true);
         try {
-            const response = await axiosInstance.post(`${API_URL}/verify-signup-code`, {
+            await axiosInstance.post(`${API_URL}/verify-signup-code`, {
                 email: formData.memberEmail,
                 token: inputCode,
             });
 
-            console.log('Verification success:', response.data);
+            setIsEmailVerified(true); // 이메일 인증 완료 상태 설정
+            handleSubmit(); // 회원가입 함수 호출
 
-            alert('이메일 인증이 완료되었습니다!');
-            navigate('/login'); // 로그인 페이지로 이동
-
+            alert("이메일 인증이 완료되었습니다!");
+            navigate("/");
         } catch (error) {
-            console.error('Verification error:', error);
-
-            if (axios.isAxiosError(error) && error.response) {
-                alert(error.response.data.message || '인증 코드가 잘못되었습니다. 다시 시도해주세요.');
-            } else {
-                alert('알 수 없는 오류가 발생했습니다. 다시 시도해주세요.');
-            }
+            alert("인증 코드가 잘못되었습니다. 다시 시도해주세요.");
+        } finally {
+            setIsLoading(false);
         }
     };
 
@@ -246,6 +241,7 @@ const Signup = () => {
     };
 
     const isButtonDisabled = !!errors[fieldNames[step - 1]];
+
 
     return (
         <div className="min-h-screen max-w-2xl m-auto flex flex-col items-center lg: border">
@@ -324,6 +320,8 @@ const Signup = () => {
                         </div>
                     </div>
                 )}
+
+                {isLoading && <LoadingSpinner />} {/* 로딩 스피너 표시 */}
 
                 <button
                     onClick={handleNextStep}

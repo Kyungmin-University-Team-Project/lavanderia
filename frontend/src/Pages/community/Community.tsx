@@ -29,19 +29,21 @@ const Community = () => {
         setIsLoading(true);
 
         try {
+            const sort = "createdAt,desc"
             const response = await axios.get(`${API_URL}/community/category`, {
                 params: {
-                    category: category === '전체' ? '' : category, // "전체"는 필터 없이 요청
+                    category: category === '전체' ? '전체' : category,
                     page,
                     size: 5, // 페이지당 게시글 수
-                    sort: 'createdAt,desc', // 내림차순 정렬
+                    sort: sort, // 내림차순 정렬 띄어쓰기 안됨
                 },
             });
 
             const newPosts = response.data.content;
+            console.log(newPosts)
 
-            setPosts(prevPosts => (page === 0 ? newPosts : [...prevPosts, ...newPosts])); // 페이지가 0일 경우 기존 데이터 초기화
-            setHasMore(!response.data.last); // 마지막 페이지인지 확인
+            setPosts(prevPosts => (page === 0 ? newPosts : [...prevPosts, ...newPosts]));
+            setHasMore(!response.data.last);
         } catch (error) {
             console.error('Error fetching posts:', error);
         } finally {
@@ -90,7 +92,6 @@ const Community = () => {
     const handleWritePost = () => {
         navigate('/community/write');
     };
-
 
     const handleTabClick = (tabName: string) => {
         setActiveTab(tabName); // 선택된 탭으로 변경

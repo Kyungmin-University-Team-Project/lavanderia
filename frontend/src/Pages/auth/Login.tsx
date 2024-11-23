@@ -34,10 +34,14 @@ const Login = () => {
     // 서버랑 연결 필요
     if (isUsernameValid && isPasswordValid) {
       try {
-        const response = await axios.post(`${API_URL}/signin`, { memberId: formData.memberId, memberPwd: formData.memberPwd });
+        const response = await axios.post(`${API_URL}/signin`, {
+          memberId: formData.memberId,
+          memberPwd: formData.memberPwd,
+        });
         const access = response.headers['access'];
 
-        login(access, rememberMe);  // Context의 login 메소드 호출
+        // 로그인 함수 호출 시 username을 추가로 전달
+        login(access, formData.memberId, rememberMe);
         navigate('/'); // 로그인 후 홈으로 이동
       } catch (error) {
         setError("아이디 또는 비밀번호가 일치하지 않습니다.");
@@ -132,21 +136,21 @@ const Login = () => {
           </label>
         </form>
 
-        <div className="mb-5 flex gap-10">
-          <button>
-            <img
-              src="/img/google.png"
-              alt="Google"
-              className="h-10 rounded-full"
-            />
-          </button>
-          <button>
-            <img src="/img/naver.png" alt="Naver" className="h-10 rounded-full" />
-          </button>
-          <button>
-            <img src="/img/kakao.png" alt="Kakao" className="h-10 rounded-full" />
-          </button>
-        </div>
+        {/*<div className="mb-5 flex gap-10">*/}
+        {/*  <button>*/}
+        {/*    <img*/}
+        {/*      src="/img/google.png"*/}
+        {/*      alt="Google"*/}
+        {/*      className="h-10 rounded-full"*/}
+        {/*    />*/}
+        {/*  </button>*/}
+        {/*  <button>*/}
+        {/*    <img src="/img/naver.png" alt="Naver" className="h-10 rounded-full" />*/}
+        {/*  </button>*/}
+        {/*  <button>*/}
+        {/*    <img src="/img/kakao.png" alt="Kakao" className="h-10 rounded-full" />*/}
+        {/*  </button>*/}
+        {/*</div>*/}
 
         <div className="text-sm font-bold text-black-600">
           <Link to="/auth/find">아이디 찾기</Link>
