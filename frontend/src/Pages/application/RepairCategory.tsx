@@ -57,7 +57,6 @@ const RepairCategory: React.FC = () => {
 
     return (
         <div className="p-6">
-            <BackButton/>
             <h2 className="text-2xl font-bold mb-4">어떻게 수선할까요?</h2>
 
             <div className="my-4 grid grid-cols-3 gap-4">

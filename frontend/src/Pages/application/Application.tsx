@@ -18,13 +18,13 @@ const Custom_services = [
         image: laundryWomen,
         url: "imgApplication",
     },
-    {
-        title: "프리미엄 세탁",
-        description: "더 섬세한 케어로 맞춤세탁",
-        details: "고가의 브랜드 및 명품 잡화를 맞춤세탁!",
-        image: premiumLaundry,
-        url: "imgApplication",
-    },
+    // {
+    //     title: "프리미엄 세탁",
+    //     description: "더 섬세한 케어로 맞춤세탁",
+    //     details: "고가의 브랜드 및 명품 잡화를 맞춤세탁!",
+    //     image: premiumLaundry,
+    //     url: "imgApplication",
+    // },
     {
         title: "수선",
         description: "의류 또는 신발 모두 수선 가능",
@@ -71,7 +71,7 @@ const Application = () => {
     };
 
     return (
-        <div className=" mx-auto mt-5 w-full bg">
+        <div className=" mx-auto mt-5 w-full">
             <header className="mb-0 px-5 text-center">
                 <h1 className="mb-3 flex justify-start text-xl font-bold ">
                     오늘 밤 11시까지 신청하면
@@ -104,14 +104,14 @@ const Application = () => {
                         image={services[0].image}
                         onClick={openDailyLaundryModal}
                     />
-                    <ServiceCard
-                        key={services[1].title}
-                        title={services[1].title}
-                        description={services[1].description}
-                        details={services[1].details}
-                        image={services[1].image}
-                        onClick={openOldClothesModal}
-                    />
+                    {/*<ServiceCard*/}
+                    {/*    key={services[1].title}*/}
+                    {/*    title={services[1].title}*/}
+                    {/*    description={services[1].description}*/}
+                    {/*    details={services[1].details}*/}
+                    {/*    image={services[1].image}*/}
+                    {/*    onClick={openOldClothesModal}*/}
+                    {/*/>*/}
                 </div>
 
                 {isDailyLaundryModal && (

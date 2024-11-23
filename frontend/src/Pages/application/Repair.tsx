@@ -23,7 +23,6 @@ const Repair = () => {
 
     return (
         <div className="p-6">
-            <BackButton/>
 
             {/* Title */}
             <h2 className="text-2xl font-bold mb-4">어떤 옷을 수선 하시겠어요?</h2>

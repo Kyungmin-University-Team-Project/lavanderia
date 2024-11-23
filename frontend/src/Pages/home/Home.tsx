@@ -71,9 +71,8 @@ const Home: React.FC = () => {
 
     return (
         <section className="font-roboto m-auto">
-            {/* 광고 */}
             <article className="relative">
-                <div className="m-auto max-w-7xl" {...handlers}>
+                <div className="m-auto max-w-xl" {...handlers}>
                     {data.advertisement.length > 0 && (
                         <div className="relative">
                             <div

@@ -1,6 +1,6 @@
 import React from 'react';
-import {FiArrowLeft} from "react-icons/fi";
 import {useNavigate} from "react-router-dom";
+import {IoChevronBack} from "react-icons/io5";
 
 const BackButton = () => {
     const navigate = useNavigate(); // navigate 함수 생성
@@ -11,7 +11,7 @@ const BackButton = () => {
 
     return (
         <button onClick={handleBackClick} className="text-black text-2xl cursor-pointer">
-            <FiArrowLeft/>
+            <IoChevronBack />
         </button>
     );
 };

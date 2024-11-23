@@ -1,10 +1,10 @@
 import axios from "axios";
-import {API_URL} from "../../Api/api";
-import {decryptToken, encryptToken} from "../auth/crypto";
+import { API_URL } from "../../Api/api";
+import { decryptToken, encryptToken } from "../auth/crypto";
 
 const axiosInstance = axios.create({
     baseURL: API_URL,
-    headers: {"Content-Type": "application/json"},
+    headers: { "Content-Type": "application/json" },
     withCredentials: true,
 });
 
@@ -12,7 +12,6 @@ const axiosInstance = axios.create({
 axiosInstance.interceptors.request.use(
     (config) => {
         const encryptedToken = localStorage.getItem("access"); // 암호화된 토큰 가져오기
-
         if (encryptedToken) {
             const token = decryptToken(encryptedToken); // 복호화
             if (token) {
@@ -34,24 +33,21 @@ axiosInstance.interceptors.response.use(
     },
     async (error) => {
         const originalRequest = error.config;
-
         // 401 에러 및 재시도 여부 확인
         if (error.response && error.response.status === 401 && !originalRequest._retry) {
             originalRequest._retry = true; // 재시도 방지 플래그 설정
 
             try {
-                
-                console.log("여긴 오나")
                 // 토큰 재발급 요청
-
-                const reissueResponse = await axios.post(`${API_URL}/reissue`, {}, {
-                    withCredentials: true, // 쿠키 포함
-                });
+                const reissueResponse = await axios.post(
+                    `${API_URL}/reissue`,
+                    {},
+                    {
+                        withCredentials: true, // 쿠키 포함
+                    }
+                );
 
                 const newAccessToken = reissueResponse.data.accessToken;
-
-                console.log(newAccessToken)
-
 
                 // 새 토큰 저장
                 if (newAccessToken) {
@@ -64,7 +60,11 @@ axiosInstance.interceptors.response.use(
                 return axiosInstance(originalRequest);
             } catch (reissueError) {
                 console.error("토큰 재발급 실패:", reissueError);
-                // 재발급 실패 시 인증 실패 처리
+                //
+                // // **로그아웃 처리**
+                // localStorage.removeItem("access"); // 저장된 토큰 제거
+                // localStorage.removeItem("rememberMe"); // Remember Me 관련 데이터 제거 (필요 시)
+                // window.location.href = "/auth/login"; // 로그인 페이지로 리다이렉트
                 return Promise.reject(reissueError);
             }
         }

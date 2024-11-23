@@ -177,7 +177,7 @@ const PostDetail: React.FC = () => {
                         {myComments.concat(comments).length > 0 ? (
                             myComments.concat(comments).map((comment, index) => (
                                 <div key={`${comment.commentId}-${index}`} className="flex items-start">
-                                    <div className="w-14 h-14 rounded-full overflow-hidden bg-gray-200">
+                                    <div className="w-10 h-10 rounded-full overflow-hidden bg-gray-200">
                                         <img
                                             src={
                                                 !comment.profileImg || comment.profileImg === "default"

@@ -63,7 +63,7 @@ const Agreement = () => {
     };
 
     return (
-      <div className="flex min-h-screen items-center justify-center bg-gray-100 p-4">
+      <div className="flex min-h-screen items-center justify-center bg-gray-50">
           <form
             className="w-full max-w-xl rounded-md border bg-white p-6 shadow sm:p-6 md:w-auto md:max-w-xl lg:p-6"
             onSubmit={(e) => {

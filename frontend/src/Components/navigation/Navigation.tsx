@@ -51,7 +51,7 @@ const Navigation: React.FC = () => {
 
   return (
       <div className={`sticky z-50 bg-white shadow text-base transition-all duration-300 ${isScrollingUp ? "top-0" : "-top-16"}`}>
-        <div className="flex h-16 w-full items-center justify-between px-7">
+        <div className="flex h-16 w-full items-center justify-between px-6">
           <div className="flex w-1/6 h-full items-center">
             <BackButton/>
           </div>

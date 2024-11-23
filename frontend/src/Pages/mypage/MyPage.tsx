@@ -4,6 +4,7 @@ import { AuthContext } from '../../Context'
 import axiosInstance from '../../Utils/axios/axiosInstance'
 import { FaAngleRight } from 'react-icons/fa'
 import { API_URL } from "../../Api/api"
+import axios from "axios";
 
 interface MemberInfo {
   memberBirth: string
@@ -41,6 +42,18 @@ const MyPage = () => {
     const memberPost = async () => {
       try {
         const response = await axiosInstance.post(`${API_URL}/member-info`);
+
+        // // 토큰 재발급 요청
+        // const reissueResponse = await axios.post(
+        //     `${API_URL}/reissue`,
+        //     {},
+        //     {
+        //       withCredentials: true, // 쿠키 포함
+        //     }
+        // );
+        //
+        // console.log(reissueResponse)
+
         const data = response.data;
         setList(data);
         console.log(data);
