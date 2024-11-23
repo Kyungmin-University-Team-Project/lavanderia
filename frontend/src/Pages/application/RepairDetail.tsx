@@ -1,11 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, FormEvent } from 'react'
 import { useLocation } from 'react-router-dom';
 import BackButton from "../../Components/common/BackButton";
+import axiosInstance from '../../Utils/axios/axiosInstance'
 
 interface DetailOption {
     type: string;
     price: number;
 }
+
 
 const RepairDetail: React.FC = () => {
     const location = useLocation();
@@ -15,6 +17,7 @@ const RepairDetail: React.FC = () => {
     const [requestText, setRequestText] = useState<string>('');
     const [isButtonEnabled, setIsButtonEnabled] = useState<boolean>(false);
 
+    // 장바구니 Add
     useEffect(() => {
         fetch('/mock/repairPrices.json')
             .then((response) => response.json())
@@ -36,11 +39,32 @@ const RepairDetail: React.FC = () => {
         setRequestText(e.target.value);
     };
 
+  // clothesType(String): 옷 종류
+  // howTo(String): 어떻게
+  // detailInfo(String): 상세 정보
+  // request(String): 요청 사항
+  // price(number): 가격
+
     // TODO: Api 나오면 연결하기
-    const handleButtonClick = () => {
-        console.log("선택된 옵션:", selectedOption);
-        console.log("수선 요청사항:", requestText);
-    };
+  const handleButtonClick = async () => {
+    const selectedDetail = details.find((item) => item.type === selectedOption);
+    if (selectedDetail) {
+      const updatedRepair = {
+        clothesType: category,
+        howTo: tag,
+        request: selectedDetail.type,
+        detailInfo: requestText,
+        price: selectedDetail.price,
+      };
+
+      try {
+        const response = await axiosInstance.post('/repair/add', updatedRepair);
+        console.log(response)
+      } catch (e) {
+        console.log(e)
+      }
+    }
+  };
 
     return (
         <div className="p-6">
