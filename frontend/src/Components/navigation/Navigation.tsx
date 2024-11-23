@@ -4,6 +4,7 @@ import Logo from "../common/Logo";
 import useProtectedNavigation from "../../hooks/useProtectedNavigation";
 import FloatingUpButton from "../floating/FloatingUpButton";
 import { useLocation } from "react-router-dom";
+import BackButton from "../common/BackButton";
 
 const navLinks = [
   { path: "/application", label: "신청하기", protected: true },
@@ -51,8 +52,8 @@ const Navigation: React.FC = () => {
   return (
       <div className={`sticky z-50 bg-white shadow text-base transition-all duration-300 ${isScrollingUp ? "top-0" : "-top-16"}`}>
         <div className="flex h-16 w-full items-center justify-between px-7">
-          <div className="flex w-1/6 items-center justify-start">
-            <FiBell className="h-6 w-6 text-black" />
+          <div className="flex w-1/6 h-full items-center">
+            <BackButton/>
           </div>
           <Logo />
           <div className="flex w-1/6 items-center justify-end gap-2">

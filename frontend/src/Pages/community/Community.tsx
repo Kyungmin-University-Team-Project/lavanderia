@@ -1,135 +1,171 @@
-import axios from 'axios';
 import React, {useState, useEffect, useRef} from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Post } from '../../Typings/community/post';
-import { decryptToken } from '../../Utils/auth/crypto';
+import axios from 'axios';
+import {useNavigate} from 'react-router-dom';
+import {Post} from '../../Typings/community/post';
 import {API_URL} from "../../Api/api";
 import {ClipLoader} from "react-spinners";
 import ActionBar from "./ActionBar";
+import {formatTime} from "../../Utils/common/formatTime";
 
 const tabs = [
-  { name: '전체', active: true },
-  { name: '후기', active: false },
-  { name: '패션', active: false },
-  { name: '내게시물', active: false }
+    {name: '전체', active: true},
+    {name: '후기', active: false},
+    {name: '패션', active: false},
 ];
 
 const Community = () => {
-  const [activeTab, setActiveTab] = useState('전체');
-  const [posts, setPosts] = useState<Post[]>([]);
-  const [isScrollingUp, setIsScrollingUp] = useState(false);
-  const navigate = useNavigate();
-  const lastScrollTop = useRef(0); //
+    const [activeTab, setActiveTab] = useState('전체');
+    const [posts, setPosts] = useState<Post[]>([]);
+    const [isScrollingUp, setIsScrollingUp] = useState(false);
+    const [currentPage, setCurrentPage] = useState(0); // 현재 페이지
+    const [isLoading, setIsLoading] = useState(false); // 로딩 상태
+    const [hasMore, setHasMore] = useState(true); // 더 로드할 데이터가 있는지 여부
+    const footerRef = useRef<HTMLDivElement | null>(null); // footer ref
+    const navigate = useNavigate();
+    const lastScrollTop = useRef(0);
 
-  useEffect(() => {
-    const fetchPosts = async () => {
-      try {
-        const response = await axios.get(`${API_URL}/community/`);
+    const fetchPosts = async (page: number, category: string) => {
+        if (isLoading || !hasMore) return; // 이미 로딩 중이거나 데이터가 없으면 중단
+        setIsLoading(true);
 
-        
-        // TODO: 게시 시간 안보내짐
-        console.log(response.data)
+        try {
+            const sort = "createdAt,desc"
+            const response = await axios.get(`${API_URL}/community/category`, {
+                params: {
+                    category: category === '전체' ? '전체' : category,
+                    page,
+                    size: 5, // 페이지당 게시글 수
+                    sort: sort, // 내림차순 정렬 띄어쓰기 안됨
+                },
+            });
 
-        setPosts(response.data);
-      } catch (error) {
-        console.error('Error fetching posts:', error);
-      }
+            const newPosts = response.data.content;
+            console.log(newPosts)
+
+            setPosts(prevPosts => (page === 0 ? newPosts : [...prevPosts, ...newPosts]));
+            setHasMore(!response.data.last);
+        } catch (error) {
+            console.error('Error fetching posts:', error);
+        } finally {
+            setIsLoading(false);
+        }
     };
 
-    fetchPosts();
-  }, []);
+    useEffect(() => {
+        fetchPosts(currentPage, activeTab); // 초기 데이터 로드
+    }, [currentPage, activeTab]);
 
-  useEffect(() => {
-    const handleScroll = () => {
-      const currentScrollTop = window.scrollY || document.documentElement.scrollTop;
-      if (currentScrollTop > lastScrollTop.current) {
-        setIsScrollingUp(false); // 스크롤 다운
-      } else {
-        setIsScrollingUp(true); // 스크롤 업
-      }
-      lastScrollTop.current = currentScrollTop <= 0 ? 0 : currentScrollTop;
+    useEffect(() => {
+        const handleScroll = () => {
+            const currentScrollTop = window.scrollY || document.documentElement.scrollTop;
+            setIsScrollingUp(currentScrollTop < lastScrollTop.current);
+            lastScrollTop.current = currentScrollTop <= 0 ? 0 : currentScrollTop;
+        };
+
+        window.addEventListener('scroll', handleScroll);
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, []);
+
+    useEffect(() => {
+        const observer = new IntersectionObserver(
+            entries => {
+                if (entries[0].isIntersecting && hasMore && !isLoading) {
+                    setCurrentPage(prevPage => prevPage + 1); // 페이지 증가
+                }
+            },
+            { threshold: 0.5 } // footer가 50% 보일 때 트리거
+        );
+
+        if (footerRef.current) {
+            observer.observe(footerRef.current);
+        }
+
+        return () => {
+            if (footerRef.current) observer.unobserve(footerRef.current);
+        };
+    }, [footerRef, hasMore, isLoading]);
+
+    const handlePostClick = (post: Post) => {
+        navigate(`/community/${post.communityId}`, { state: { post } });
     };
 
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+    const handleWritePost = () => {
+        navigate('/community/write');
+    };
 
-  const handlePostClick = (post: Post) => {
-    navigate(`/community/${post.communityId}`, { state: { post } });
-  };
+    const handleTabClick = (tabName: string) => {
+        setActiveTab(tabName); // 선택된 탭으로 변경
+        setCurrentPage(0); // 페이지 초기화
+        setPosts([]); // 게시글 초기화
+        setHasMore(true); // 로드 가능 상태 초기화
+    };
 
-  const handleWritePost = () => {
-    navigate('/community/write');
-  };
+    return (
+        <div className="max-w-2xl mx-auto h-full">
+            <header className="w-full px-4 sticky top-[50px] z-10 backdrop-blur-sm">
+                <div className="flex gap-4 p-3">
+                    {tabs.map(tab => (
+                        <button
+                            key={tab.name}
+                            className={`px-4 py-2 rounded-full ${activeTab === tab.name ? 'bg-black text-white' : 'bg-gray-200 text-gray-600'}`}
+                            onClick={() => handleTabClick(tab.name)} // 탭 클릭 핸들러 연결
+                        >
+                            {tab.name}
+                        </button>
+                    ))}
+                </div>
+            </header>
 
-  return (
-    <div className="max-w-2xl mx-auto h-full">
-      <header className="w-full px-4 sticky top-[50px] z-10 backdrop-blur-sm">
-        <div className="flex gap-4 p-3">
-          {tabs.map(tab => (
-            <button
-              key={tab.name}
-              className={`px-4 py-2 rounded-full ${activeTab === tab.name ? 'bg-black text-white' : 'bg-gray-200 text-gray-600'}`}
-              onClick={() => setActiveTab(tab.name)}
+            <div className="space-y-4 px-4">
+                {posts.map(post => (
+                    <div
+                        key={post.communityId}
+                        className="bg-white w-full mt-3 rounded shadow-lg border-gray-300 cursor-pointer text-left"
+                        onClick={() => handlePostClick(post)}
+                    >
+                        <div className="flex items-center p-4">
+                            <div className="bg-gray-200 w-10 h-10 rounded-full"></div>
+                            <div className="ml-3">
+                                <div className="font-bold">{post.memberId}</div>
+                                <div className="text-gray-500 text-sm">
+                                    {post.category} - {formatTime(post.createdDate)}
+                                </div>
+                            </div>
+                        </div>
+
+                        {post.image && (
+                            <div className="mb-2">
+                                <img src={post.image} alt={post.title} className="m-auto w-full h-auto"/>
+                            </div>
+                        )}
+
+                        <div className="p-4">
+                            <ActionBar/>
+                            <div className="mb-2">{post.content}</div>
+                        </div>
+                    </div>
+                ))}
+            </div>
+
+            <footer
+                className="flex justify-center items-center w-full h-[200px]"
+                ref={footerRef}
             >
-              {tab.name}
+                {isLoading && <ClipLoader size={40} color={"#6e6e6e"}/>}
+                {!hasMore && <div className="text-gray-500">모든 피드를 확인하셨어요! 피드를 작성해주세요!</div>}
+            </footer>
+
+            <button
+                className={`fixed bottom-0 left-1/2 transform -translate-x-1/2 bg-black text-white rounded-full p-4 shadow-lg hover:bg-gray-600 transition-transform ${
+                    isScrollingUp ? '-translate-y-10' : 'translate-y-full'
+                }`}
+                onClick={handleWritePost}
+                style={{transition: 'transform 0.3s ease-in-out'}}
+            >
+                글 작성
             </button>
-          ))}
         </div>
-      </header>
-
-      {/* TODO: 각 포스트에 대한 슬라이드 기능 추가*/}
-
-      <div className="space-y-4 px-4">
-        {posts.map(post => (
-          <button
-            key={post.communityId}
-            className="bg-white w-full mt-3 rounded shadow-lg border-gray-300 cursor-pointer text-left"
-            onClick={() => handlePostClick(post)}>
-            <div className="flex items-center p-4">
-              <div className="bg-gray-200 w-10 h-10 rounded-full"></div>
-              <div className="ml-3">
-                <div className="font-bold">{post.memberId}</div>
-                <div className="text-gray-500 text-sm">{post.category} - {new Date(post.createdAt).toLocaleDateString()}</div>
-              </div>
-            </div>
-            
-            {/* TODO: 이미지 여기서 이미지가 여러장일 경우 슬라이드로 보여지도록 수정*/}
-            {post.image && (
-              <div className="mb-2">
-                <img src={post.image} alt={post.title} className="m-auto w-full h-auto" />
-              </div>
-            )}
-
-
-            <div className="px-4">
-              {/*이부분에 ActionBar*/}
-              <ActionBar/>
-
-              {/*게시글 본문 본문은 1줄정도만 작게 보여주고
-                나머지는 상세페이지에서 확인하도록*/}
-              <div className="mb-2">{post.content}</div>
-            </div>
-          </button>
-        ))}
-      </div>
-
-      {/*TODO: 인피니티스크롤 구현하기*/}
-      <footer className="flex justify-center items-center w-full h-[200px]">
-        <ClipLoader size={40} color={"#8f8f8f"}/>
-      </footer>
-
-      <button
-        className={`fixed bottom-0 left-1/2 transform -translate-x-1/2 bg-black text-white rounded-full p-4 shadow-lg hover:bg-gray-600 transition-transform ${
-          isScrollingUp ? '-translate-y-10' : 'translate-y-full'
-        }`}
-        onClick={handleWritePost}
-        style={{ transition: 'transform 0.3s ease-in-out' }}
-      >
-        글 작성
-      </button>
-    </div>
-  );
+    );
 };
 
 export default Community;

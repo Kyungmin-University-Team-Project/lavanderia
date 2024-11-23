@@ -21,5 +21,6 @@ module.exports = {
     require("postcss-preset-env")({
       stage: 0,
     }),
+    require('tailwind-scrollbar'), // 스크롤바 플러그인 추가
   ],
 };
