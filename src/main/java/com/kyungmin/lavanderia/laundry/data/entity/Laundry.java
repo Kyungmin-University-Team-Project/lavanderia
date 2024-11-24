@@ -1,16 +1,14 @@
 package com.kyungmin.lavanderia.laundry.data.entity;
 
 import com.kyungmin.lavanderia.cart.data.entity.LaundryCart;
+import com.kyungmin.lavanderia.order.data.entity.Order;
 import com.kyungmin.lavanderia.order.data.entity.OrderDetail;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.List;
 
-@Getter
+@Data
 @Entity
 @Builder
 @NoArgsConstructor
@@ -37,6 +35,10 @@ public class Laundry {
 
     @OneToMany(mappedBy = "laundry")
     private List<LaundryCart> laundryCart;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "ORDER_ID")
+    private Order order;
 
     /*@OneToMany(mappedBy = "laundry")
     private List<Cart> cart;*/

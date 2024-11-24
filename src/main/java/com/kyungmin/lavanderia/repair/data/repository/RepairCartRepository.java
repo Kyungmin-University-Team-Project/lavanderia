@@ -1,5 +1,6 @@
 package com.kyungmin.lavanderia.repair.data.repository;
 
+import com.kyungmin.lavanderia.repair.data.entity.Repair;
 import com.kyungmin.lavanderia.repair.data.entity.RepairCart;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -13,4 +14,6 @@ public interface RepairCartRepository extends JpaRepository<RepairCart, Long> {
 
     @Query("SELECT rc FROM RepairCart rc WHERE rc.member.memberId = :memberId")
     List<RepairCart> findRepairsByMemberId(@Param("memberId") String memberId);
+
+    void deleteByRepair(Repair repair);
 }

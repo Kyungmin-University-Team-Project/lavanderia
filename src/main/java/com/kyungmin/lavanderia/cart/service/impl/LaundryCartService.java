@@ -3,6 +3,7 @@ package com.kyungmin.lavanderia.cart.service.impl;
 import com.kyungmin.lavanderia.cart.data.dto.LaundryCartDto;
 import com.kyungmin.lavanderia.cart.data.entity.LaundryCart;
 import com.kyungmin.lavanderia.cart.repository.LaundryCartRepository;
+import com.kyungmin.lavanderia.laundry.data.entity.Laundry;
 import com.kyungmin.lavanderia.member.data.entity.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -32,5 +33,9 @@ public class LaundryCartService {
         }
 
         laundryCartRepository.delete(laundryCart);
+    }
+
+    public void deleteAllCart(List<Laundry> laundryList) {
+        laundryCartRepository.deleteAllByLaundry(laundryList);
     }
 }

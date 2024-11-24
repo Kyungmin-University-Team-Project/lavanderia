@@ -1,6 +1,8 @@
 package com.kyungmin.lavanderia.laundry.controller;
 
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kyungmin.lavanderia.laundry.data.dto.LaundryDto.LaundryInsert;
 import com.kyungmin.lavanderia.laundry.service.LaundryService;
 import com.kyungmin.lavanderia.member.data.entity.Member;
@@ -24,6 +26,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 @Tag(name = "세탁물 카트 API")
@@ -42,7 +45,7 @@ public class LaundryController {
     @PostMapping("/add")
     @ApiResponse(responseCode = "200", description = "세탁물 등록 성공")
     @Operation(summary = "세탁물 등록", description = "세탁물 정보를 등록합니다. (로그인 필요) 세탁물 등록시 자동으로 세탁물 카트에 추가됩니다.")
-    public ResponseEntity<String> addLaundry(@AuthenticationPrincipal Member member, @RequestPart List<LaundryInsert> laundryInserts, @RequestPart List<MultipartFile> laundryImages) throws IOException {
+    public ResponseEntity<String> addLaundry(@AuthenticationPrincipal Member member, @RequestPart LaundryInsert laundryInserts, @RequestPart MultipartFile laundryImages) throws IOException {
 
         laundryService.addLaundra(member, laundryInserts, laundryImages);
 
@@ -85,8 +88,23 @@ public class LaundryController {
               "suggested_price": 45000
             }
              */
-            System.out.println("Response from Flask server: " + response.getBody());
-            return ResponseEntity.ok("결과값 : " + response.getBody());
+
+            // JSON 문자열 파싱하여 필요한 값 추출
+            ObjectMapper objectMapper = new ObjectMapper();
+            Map<String, Object> responseMap = objectMapper.readValue(response.getBody(), new TypeReference<>() {});
+
+
+            // 값 추출
+            String className = (String) responseMap.get("class_name");
+            int suggestedPrice = (int) responseMap.get("suggested_price");
+
+            // LaundryInsert 객체 생성
+            LaundryInsert laundryInsert = LaundryInsert.builder()
+                    .type(className)
+                    .price(suggestedPrice)
+                    .build();
+
+            return ResponseEntity.ok().body(laundryInsert);
 
         } catch (Exception e) {
             System.err.println("Error processing image: " + e.getMessage());

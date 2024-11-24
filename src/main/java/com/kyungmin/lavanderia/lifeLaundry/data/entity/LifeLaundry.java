@@ -1,6 +1,7 @@
 package com.kyungmin.lavanderia.lifeLaundry.data.entity;
 
 import com.kyungmin.lavanderia.member.data.entity.Member;
+import com.kyungmin.lavanderia.order.data.entity.Order;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -25,4 +26,8 @@ public class LifeLaundry {
 
     @Column(name = "PRICE")
     private int price; // 상품 가격 (예: 13500)
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "ORDER_ID")
+    private Order order;
 }

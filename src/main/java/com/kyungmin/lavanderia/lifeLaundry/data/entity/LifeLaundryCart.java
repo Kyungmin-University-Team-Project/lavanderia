@@ -24,7 +24,7 @@ public class LifeLaundryCart {
     @JoinColumn(name = "MEMBER_ID")
     private Member member;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "LIFE_LAUNDRY_ID")
     private LifeLaundry lifeLaundry;
 }

@@ -20,7 +20,7 @@ public class RepairCart {
     @Column(name = "REPAIR_CART_ID")
     private Long repairCartId;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "REPAIR_ID", nullable = false)
     private Repair repair;
 

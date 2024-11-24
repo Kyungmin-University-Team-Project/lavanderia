@@ -63,6 +63,7 @@ public class RepairServiceImpl implements RepairService {
 
             // JPA delete 메서드 호출
             repairCartRepository.delete(repairCart);
+            repairRepository.delete(repairCart.getRepair());
         } catch (Exception e) {
             throw new IllegalArgumentException("수선 삭제 실패: " + e.getMessage());
         }
@@ -86,5 +87,15 @@ public class RepairServiceImpl implements RepairService {
                 .toList();
     }
 
+    @Override
+    public void deleteRepairCart(List<Repair> repairList) {
+        try {
+            repairList.forEach(repair -> {
+                repairCartRepository.deleteByRepair(repair);
+            });
+        } catch (Exception e) {
+            throw new IllegalArgumentException("수선 삭제 실패: " + e.getMessage());
+        }
+    }
 
 }

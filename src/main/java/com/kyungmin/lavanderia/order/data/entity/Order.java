@@ -1,7 +1,10 @@
 package com.kyungmin.lavanderia.order.data.entity;
 
+import com.kyungmin.lavanderia.laundry.data.entity.Laundry;
+import com.kyungmin.lavanderia.lifeLaundry.data.entity.LifeLaundry;
 import com.kyungmin.lavanderia.member.data.entity.Member;
 import com.kyungmin.lavanderia.order.data.constant.DeliveryStatus;
+import com.kyungmin.lavanderia.repair.data.entity.Repair;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -53,6 +56,21 @@ public class Order {
 
     @Column(name = "DELIVERY_STATUS")
     private String dlvrReqStatus;
+
+    @Column(name = "TOTAL_PRICE")
+    private int totalPrice;
+
+    // LifeLaundry와의 관계
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
+    private List<LifeLaundry> lifeLaundryList;
+
+    // Repair와의 관계
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
+    private List<Repair> repairList;
+
+    // Laundry와의 관계
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
+    private List<Laundry> laundryList;
 
     @OneToMany(mappedBy = "orderId")
     private List<OrderDetail> orderDetailList;

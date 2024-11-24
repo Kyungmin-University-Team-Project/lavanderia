@@ -57,6 +57,7 @@ public class LifeLaundryServiceImpl implements LifeLaundryService {
             }
 
             lifeLaundryCartRepository.delete(lifeLaundryCart);
+            lifeLaundryRepository.delete(lifeLaundryCart.getLifeLaundry());
         }catch (Exception e){
             throw new IllegalArgumentException("생활 빨래 삭제 실패: " + e.getMessage());
         }
@@ -85,5 +86,15 @@ public class LifeLaundryServiceImpl implements LifeLaundryService {
         }
     }
 
+    @Override
+    public void deleteLifeLaundryCart(List<LifeLaundry> lifeLaundryList) {
+        try {
+            lifeLaundryList.forEach(lifeLaundry -> {
+                lifeLaundryCartRepository.deleteByLifeLaundry(lifeLaundry);
+            });
+        }catch (Exception e){
+            throw new IllegalArgumentException("생활 빨래 장바구니 삭제 실패: " + e.getMessage());
+        }
+    }
 
 }
