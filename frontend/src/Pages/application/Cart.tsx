@@ -1,56 +1,29 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { Link } from "react-router-dom";
-import axiosInstance from '../../Utils/axios/axiosInstance'
+import useCartAdd from '../../hooks/useCartAdd'
 
-interface Repair {
-  id: number;
-  clothesType: string;
-  howTo: string;
-  detailInfo: string;
-  request: string;
-  repairCartId: string
-  price: number;
-}
+
 
 const Cart: React.FC = () => {
-  const [repairData, setRepairData] = useState<Repair[]>([]);
-  const [loading, setLoading] = useState(false);
+  const {data: repairData, loading: repairLoading, error: repairError, handleRemove: handleRemove} =
+    useCartAdd(
+      '/repair/cart-list', '/repair/delete', 'repairCartId')
 
-  // 장바구니 추가 한거 불러오기
-  // repairData로 useEffect에 [] 넣으면 무한으로 요청함
-  // state 상태를 하나 더 만들어서 해결함
+  const {
+    data: lifeData,
+    loading: lifeLoading,
+    error: lifeLoadingError,
+    handleRemove: handleLifeRemove
+  } = useCartAdd('/life-laundry/cart-list', '/life-laundry/delete', 'lifeLaundryCartId');
+  
+  let totalPrice = repairData.reduce((total, item) => total + item.price, 0)
+  + lifeData.reduce((total, item) => total + item.price, 0);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axiosInstance.post('/repair/cart-list');
-        setRepairData(response.data);
-      } catch (e) {
-        console.log(e);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchData();
-  }, [loading]);
-
-  // 삭제 로직
-  const handleRemove = async (id: number) => {
-    const itemToRemove = repairData.find((item) => item.id === id);
-    if (!itemToRemove) {
-      console.error('아이템 없다 마');
-      return;
-    }
-    try {
-      const response = await axiosInstance.post('/repair/delete', { repairCartId: itemToRemove.repairCartId });
-      console.log('Response:', response.data);
-      setLoading((prev) => !prev)
-      setRepairData((prevData) => prevData.filter((item) => item.id !== id));
-    } catch (error) {
-      console.error('Error deleting item:', error);
-    }
-  };
-
+  if (repairLoading || lifeLoading) {
+    return <div>로딩 중...</div>;
+  } else if(lifeLoadingError || repairError){
+    return <div>오류 입니다...</div>
+  }
 
   return (
     <div className="max-w-6xl w-full p-5 mx-auto">
@@ -82,7 +55,37 @@ const Cart: React.FC = () => {
                   </li>
                 ))}
               </ul>
-
+              <ul className="space-y-4">
+                {lifeData && lifeData.length > 0 && (
+                  <>
+                    <h2 className="text-xl font-bold mb-4 mt-4">생활빨래</h2>
+                    <ul>
+                      {lifeData.map((item) => (
+                        <li key={item.id}
+                            className="flex justify-between items-center p-4 bg-white border border-gray-300 rounded-lg shadow-md hover:shadow-lg transition-all mb-2">
+                          <div>
+                            <p className="text-gray-700 font-medium text-xl">
+                              {item.type}
+                            </p>
+                            <p className="text-gray-600">
+                              {item.weight}Kg
+                            </p>
+                            <p className="font-semibold text-lg text-gray-800">
+                              {item.price.toLocaleString()}원
+                            </p>
+                          </div>
+                          <button
+                            onClick={() => handleLifeRemove(item.id)}
+                            className="px-2 py-1 bg-red-500 text-white rounded hover:bg-red-600 focus:outline-none transition-all"
+                          >
+                            X
+                          </button>
+                        </li>
+                      ))}
+                    </ul>
+                  </>
+                )}
+              </ul>
             </div>
           </div>
         </div>
@@ -91,7 +94,10 @@ const Cart: React.FC = () => {
           <div className="flex flex-col justify-between rounded-lg border h-auto p-5 shadow-md mb-3 flex-grow">
             <h2 className="mb-3  font-bold border-b border-gray-600 pb-2">상품 내역</h2>
             <p>
-              {repairData.reduce((total, item) => total + item.price, 0).toLocaleString()}원
+              {
+                totalPrice.toLocaleString()
+              }
+              원
             </p>
             <div className="text-start text-black"></div>
           </div>
