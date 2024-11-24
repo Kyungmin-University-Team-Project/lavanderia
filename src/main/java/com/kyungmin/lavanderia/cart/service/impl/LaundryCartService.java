@@ -36,6 +36,12 @@ public class LaundryCartService {
     }
 
     public void deleteAllCart(List<Laundry> laundryList) {
-        laundryCartRepository.deleteAllByLaundry(laundryList);
+        try {
+            laundryList.forEach(laundry -> {
+                laundryCartRepository.deleteByLaundry(laundry);
+            });
+        }catch (Exception e){
+            throw new IllegalArgumentException("생활 빨래 장바구니 삭제 실패: " + e.getMessage());
+        }
     }
 }
