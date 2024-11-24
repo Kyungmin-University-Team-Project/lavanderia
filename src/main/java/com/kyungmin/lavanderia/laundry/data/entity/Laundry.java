@@ -1,6 +1,6 @@
 package com.kyungmin.lavanderia.laundry.data.entity;
 
-import com.kyungmin.lavanderia.cart.data.entity.Cart;
+import com.kyungmin.lavanderia.cart.data.entity.LaundryCart;
 import com.kyungmin.lavanderia.order.data.entity.OrderDetail;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -36,6 +36,9 @@ public class Laundry {
     private List<OrderDetail> orderDetailList;
 
     @OneToMany(mappedBy = "laundry")
-    private List<Cart> cart;
+    private List<LaundryCart> laundryCart;
+
+    /*@OneToMany(mappedBy = "laundry")
+    private List<Cart> cart;*/
 
 }
