@@ -25,7 +25,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -45,9 +44,9 @@ public class LaundryController {
     @PostMapping("/add")
     @ApiResponse(responseCode = "200", description = "세탁물 등록 성공")
     @Operation(summary = "세탁물 등록", description = "세탁물 정보를 등록합니다. (로그인 필요) 세탁물 등록시 자동으로 세탁물 카트에 추가됩니다.")
-    public ResponseEntity<String> addLaundry(@AuthenticationPrincipal Member member, @RequestPart LaundryInsert laundryInserts, @RequestPart MultipartFile laundryImages) throws IOException {
+    public ResponseEntity<String> addLaundry(@AuthenticationPrincipal Member member, @RequestPart LaundryInsert laundryInsert, @RequestPart MultipartFile laundryImages) throws IOException {
 
-        laundryService.addLaundra(member, laundryInserts, laundryImages);
+        laundryService.addLaundra(member, laundryInsert, laundryImages);
 
         return ResponseEntity.ok("세탁물 등록 성공");
     }
