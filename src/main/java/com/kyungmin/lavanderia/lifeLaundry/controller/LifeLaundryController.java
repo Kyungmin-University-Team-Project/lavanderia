@@ -45,7 +45,7 @@ public class LifeLaundryController {
     public ResponseEntity<?> deleteLifeLaundry(@RequestBody LifeLaundryDTO.CartIdDTO cartIdDTO) {
         String memberId = SecurityContextHolder.getContext().getAuthentication().getName();
         try {
-            lifeLaundryService.deleteLifeLaundry(cartIdDTO.getRepairCartId(), memberId);
+            lifeLaundryService.deleteLifeLaundry(cartIdDTO.getLifeLaundryCartId(), memberId);
             return ResponseEntity.ok().body("생활 빨래 장바구니 삭제 성공");
         } catch (Exception e) {
             log.error("/life-laundry/delete - {} - {}", e.getMessage(), memberId);
