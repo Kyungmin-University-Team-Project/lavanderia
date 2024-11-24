@@ -62,9 +62,10 @@ const Application = () => {
         setSelectedService(null);
     };
 
-    const openOldClothesModal = () => {
-        setIsOldClothesModal(true);
-    };
+    // const openOldClothesModal = () => {
+    //     setIsOldClothesModal(true);
+    // };
+    //
     const closeOldClothesModal = () => {
         setIsOldClothesModal(false);
         setSelectedService(null);
