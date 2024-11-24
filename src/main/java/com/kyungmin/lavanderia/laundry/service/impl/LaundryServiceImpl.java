@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -25,15 +24,15 @@ public class LaundryServiceImpl implements LaundryService {
     private final LaundryCartRepository laundryCartRepository;
 
     @Override
-    public void addLaundra(Member member, LaundryInsert laundryInserts, MultipartFile laundryImage) throws IOException {
+    public void addLaundra(Member member, LaundryInsert laundryInsert, MultipartFile laundryImage) throws IOException {
 
-        if(laundryInserts != null && laundryImage != null) {
+        /*if(laundryInsert != null && laundryImage != null) {
             throw new IllegalArgumentException("세탁물 정보와 이미지 정보가 일치하지 않습니다.");
-        }
+        }*/
 
         String imageUrl = GoogleCloudUtils.uploadSingleFile(laundryImage);
 
-        Laundry laundryEntity = LaundryMapper.INSTANCE.toEntity(laundryInserts, imageUrl);
+        Laundry laundryEntity = LaundryMapper.INSTANCE.toEntity(laundryInsert, imageUrl);
 
         Laundry savedLaundry = laundryRepository.save(laundryEntity);
 
