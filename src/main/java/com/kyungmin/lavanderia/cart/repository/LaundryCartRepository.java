@@ -10,5 +10,5 @@ import java.util.List;
 public interface LaundryCartRepository extends JpaRepository<LaundryCart, Long> {
     List<LaundryCart> findAllByMember(Member member);
 
-    void deleteAllByLaundry(List<Laundry> laundryList);
+    void deleteByLaundry(Laundry laundry);
 }
