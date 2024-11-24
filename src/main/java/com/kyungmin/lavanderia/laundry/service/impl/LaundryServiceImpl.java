@@ -25,13 +25,26 @@ public class LaundryServiceImpl implements LaundryService {
     private final LaundryCartRepository laundryCartRepository;
 
     @Override
-    public void addLaundra(Member member, List<LaundryInsert> laundryInserts, List<MultipartFile> laundryImages) throws IOException {
+    public void addLaundra(Member member, LaundryInsert laundryInserts, MultipartFile laundryImage) throws IOException {
 
-        if(laundryInserts.size() != laundryImages.size()) {
+        if(laundryInserts != null && laundryImage != null) {
             throw new IllegalArgumentException("세탁물 정보와 이미지 정보가 일치하지 않습니다.");
         }
 
-        for(int i = 0; i < laundryInserts.size(); i++) {
+        String imageUrl = GoogleCloudUtils.uploadSingleFile(laundryImage);
+
+        Laundry laundryEntity = LaundryMapper.INSTANCE.toEntity(laundryInserts, imageUrl);
+
+        Laundry savedLaundry = laundryRepository.save(laundryEntity);
+
+        LaundryCart laundryCart = LaundryCart.builder()
+                .laundry(savedLaundry)
+                .member(member)
+                .build();
+
+        laundryCartRepository.save(laundryCart);
+
+        /*for(int i = 0; i < laundryInserts.size(); i++) {
             LaundryInsert laundry = laundryInserts.get(i);
             MultipartFile laundryImage = laundryImages.get(i);
 
@@ -47,7 +60,7 @@ public class LaundryServiceImpl implements LaundryService {
                     .build();
 
             laundryCartRepository.save(laundryCart);
-        }
+        }*/
 
     }
 }

@@ -1,6 +1,7 @@
 package com.kyungmin.lavanderia.repair.data.entity;
 
 import com.kyungmin.lavanderia.member.data.entity.Member;
+import com.kyungmin.lavanderia.order.data.entity.Order;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -41,4 +42,8 @@ public class Repair {
     // 가격
     @Column(name = "PRICE")
     private int price;
+
+    @ManyToOne(fetch = FetchType.LAZY) // 다대일 관계 설정
+    @JoinColumn(name = "ORDER_ID") // 외래 키 매핑
+    private Order order;
 }

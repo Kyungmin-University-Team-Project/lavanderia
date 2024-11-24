@@ -9,5 +9,5 @@ import java.util.List;
 
 public interface LaundryService {
 
-    void addLaundra(Member member, List<LaundryInsert> laundryInserts, List<MultipartFile> laundryImages) throws IOException;
+    void addLaundra(Member member, LaundryInsert laundryInserts, MultipartFile laundryImages) throws IOException;
 }

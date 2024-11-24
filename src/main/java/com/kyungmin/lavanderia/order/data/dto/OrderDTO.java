@@ -39,6 +39,18 @@ public class OrderDTO {
         @Schema(description = "배송 요청 메시지", example = "문 앞에 두고 가세요")
         private String dlvrReqMessage;
 
+        @Schema(description = "총 금액", example = "1500000")
+        private int totalPrice;
+
+        @Schema(description = "맞춤 세탁Id(laundryId)", example = "1")
+        private List<Long> laundryIdList;
+
+        @Schema(description = "생활 세탁Id(lifeLaundryId)", example = "1")
+        private List<Long> lifeLaundryIdList;
+
+        @Schema(description = "옷 수선Id(repairId)", example = "1")
+        private List<Long> repairIdList;
+
         @Schema(description = "주문 상세 정보")
         private List<InsertOrderDetail> orderDetailList;
 
