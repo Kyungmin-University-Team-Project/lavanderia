@@ -22,7 +22,7 @@ public class LifeLaundryDTO {
     @AllArgsConstructor
     @Builder
     public static class CartIdDTO {
-        private Long repairCartId;
+        private Long lifeLaundryCartId;
     }
 
     @Getter
