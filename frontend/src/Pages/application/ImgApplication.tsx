@@ -38,7 +38,6 @@ const ImgApplication: React.FC = () => {
 
     return (
         <div className="mx-auto mt-5 w-full px-5">
-            <BackButton/>
             <h1 className="text-2xl font-bold mb-5">세탁 신청 상세</h1>
 
             <div className="mb-5">

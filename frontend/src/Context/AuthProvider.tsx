@@ -1,5 +1,5 @@
 import React, { createContext, useState, useEffect, ReactNode } from 'react';
-import { decryptToken, encryptToken } from '../Utils/auth/crypto';
+import { encryptToken } from '../Utils/auth/crypto';
 
 // Context 생성
 interface AuthContextType {
@@ -7,6 +7,10 @@ interface AuthContextType {
   access: string;
   login: (access: string, username: string, rememberMe: boolean) => void;
   logout: () => void;
+}
+
+interface AuthProviderProps {
+  children: ReactNode;
 }
 
 const defaultAuthContext: AuthContextType = {
@@ -17,10 +21,6 @@ const defaultAuthContext: AuthContextType = {
 };
 
 export const AuthContext = createContext<AuthContextType>(defaultAuthContext);
-
-interface AuthProviderProps {
-  children: ReactNode;
-}
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);

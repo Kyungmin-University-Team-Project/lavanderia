@@ -1,27 +1,42 @@
 import React, {useState} from 'react';
+import axios from 'axios';
 import emptyBasket from '../../Assets/Img/application/empty_laundry_basket.png';
 import fullBasket from '../../Assets/Img/application/full_laundry_basket.png';
+import {API_URL} from '../../Api/api';
+import axiosInstance from "../../Utils/axios/axiosInstance";
 
-// TODO: 타입 모듈화 하기
-const DailyLaundryModal = ({service, closeModal}: any) => {
+const DailyLaundryModal = ({closeModal}: any) => {
     const [selectedOption, setSelectedOption] = useState<string | null>(null);
 
     // 각 버튼 클릭 시 처리 함수
     const handleButton1Click = () => {
         setSelectedOption("3.5KG 미만");
-
     };
 
     const handleButton2Click = () => {
         setSelectedOption("3.5KG 이상");
-
     };
 
     // 확인 버튼 클릭 시 처리 함수
-    const handleConfirmClick = () => {
+    const handleConfirmClick = async () => {
         if (selectedOption) {
+            const requestData = {
+                type: selectedOption === "3.5KG 미만" ? "Small" : "Large",
+                weight: selectedOption === "3.5KG 미만" ? 3.5 : 4.0, // 무게 예시 값
+                price: selectedOption === "3.5KG 미만" ? 13500 : 1500, // 가격 예시 값
+            };
 
-            closeModal();
+            try {
+                const response = await axiosInstance.post(`${API_URL}/life-laundry/add`, requestData);
+
+                if (response.status === 200) {
+                    alert("생활 빨래가 성공적으로 추가되었습니다!");
+                    closeModal(); // 모달 닫기
+                }
+            } catch (error) {
+                console.error("생활 빨래 추가 실패:", error);
+                alert("생활 빨래 추가 중 오류가 발생했습니다.");
+            }
         }
     };
 

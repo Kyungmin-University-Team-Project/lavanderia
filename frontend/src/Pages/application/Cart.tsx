@@ -19,9 +19,9 @@ const Cart: React.FC = () => {
   // 장바구니 추가 한거 불러오기
   // repairData로 useEffect에 [] 넣으면 무한으로 요청함
   // state 상태를 하나 더 만들어서 해결함
+
   useEffect(() => {
     const fetchData = async () => {
-      setLoading(true);
       try {
         const response = await axiosInstance.post('/repair/cart-list');
         setRepairData(response.data);
@@ -63,7 +63,7 @@ const Cart: React.FC = () => {
           <div className="flex flex-col rounded-lg border p-5 shadow-md h-auto">
             <h2 className="mb-4 text-xl font-bold">주문상품</h2>
             <div>
-              <ul className="space-y-4"> {/* Space between items */}
+              <ul className="space-y-4">
                 {repairData.map((item) => (
                   <li key={item.id}
                       className="flex justify-between items-center p-4 bg-white border border-gray-300 rounded-lg shadow-md hover:shadow-lg transition-all">

@@ -4,10 +4,13 @@ import Navigation from "../navigation/Navigation";
 
 const Header = () => {
     return (
-        <header className='m-auto max-w-xl'>
-            <Navigation />
-            <Outlet />
-        </header>
+        <div className="bg-gray-50">
+            <header className='m-auto max-w-xl min-h-screen bg-white'>
+                <Navigation/>
+                <Outlet/>
+            </header>
+        </div>
+
     );
 };
 

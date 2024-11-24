@@ -1,5 +1,5 @@
-import React, { useState, useEffect, FormEvent } from 'react'
-import { useLocation } from 'react-router-dom';
+import React, {useState, useEffect, FormEvent} from 'react'
+import {useLocation, useNavigate} from 'react-router-dom';
 import BackButton from "../../Components/common/BackButton";
 import axiosInstance from '../../Utils/axios/axiosInstance'
 
@@ -11,11 +11,14 @@ interface DetailOption {
 
 const RepairDetail: React.FC = () => {
     const location = useLocation();
-    const { category, tag } = location.state;
+    const {category, tag} = location.state;
     const [details, setDetails] = useState<DetailOption[]>([]);
     const [selectedOption, setSelectedOption] = useState<string>('');
     const [requestText, setRequestText] = useState<string>('');
     const [isButtonEnabled, setIsButtonEnabled] = useState<boolean>(false);
+
+    // 컴포넌트 내부
+    const navigate = useNavigate();
 
     // 장바구니 Add
     useEffect(() => {
@@ -39,36 +42,38 @@ const RepairDetail: React.FC = () => {
         setRequestText(e.target.value);
     };
 
-  // clothesType(String): 옷 종류
-  // howTo(String): 어떻게
-  // detailInfo(String): 상세 정보
-  // request(String): 요청 사항
-  // price(number): 가격
+    // clothesType(String): 옷 종류
+    // howTo(String): 어떻게
+    // detailInfo(String): 상세 정보
+    // request(String): 요청 사항
+    // price(number): 가격
 
     // TODO: Api 나오면 연결하기
-  const handleButtonClick = async () => {
-    const selectedDetail = details.find((item) => item.type === selectedOption);
-    if (selectedDetail) {
-      const updatedRepair = {
-        clothesType: category,
-        howTo: tag,
-        request: selectedDetail.type,
-        detailInfo: requestText,
-        price: selectedDetail.price,
-      };
+    const handleButtonClick = async () => {
+        const selectedDetail = details.find((item) => item.type === selectedOption);
+        if (selectedDetail) {
+            const updatedRepair = {
+                clothesType: category,
+                howTo: tag,
+                request: selectedDetail.type,
+                detailInfo: requestText,
+                price: selectedDetail.price,
+            };
 
-      try {
-        const response = await axiosInstance.post('/repair/add', updatedRepair);
-        console.log(response)
-      } catch (e) {
-        console.log(e)
-      }
-    }
-  };
+            try {
+                const response = await axiosInstance.post('/repair/add', updatedRepair);
+                alert("상품을 성공적으로 추가했습니다!");
+                navigate('/'); // '/' 경로로 이동
+                console.log(response);
+            } catch (e) {
+                console.error("상품 추가 실패:", e);
+                alert("상품 추가에 실패했습니다. 다시 시도해주세요.");
+            }
+        }
+    };
 
     return (
         <div className="p-6">
-            <BackButton />
             <h2 className="text-2xl font-bold mb-4">{tag} 상세 정보</h2>
 
             {/* 커스텀 라디오 버튼 목록 */}
@@ -84,8 +89,8 @@ const RepairDetail: React.FC = () => {
                                 className={`w-5 h-5 inline-flex items-center justify-center rounded-full border-2 mr-3 ${selectedOption === item.type ? 'border-black' : 'border-gray-300'}`}
                             >
                                 {selectedOption === item.type ?
-                                    <span className="w-2 h-2 bg-black rounded-full" /> :
-                                    <span className="w-2 h-2 bg-gray-300 rounded-full" />}
+                                    <span className="w-2 h-2 bg-black rounded-full"/> :
+                                    <span className="w-2 h-2 bg-gray-300 rounded-full"/>}
                             </span>
                             <input
                                 type="radio"

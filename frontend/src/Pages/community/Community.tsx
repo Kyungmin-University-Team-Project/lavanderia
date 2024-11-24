@@ -141,7 +141,7 @@ const Community = () => {
 
                         <div className="p-4">
                             <ActionBar/>
-                            <div className="mb-2">{post.content}</div>
+                            <div className="mt-4">{post.content}</div>
                         </div>
                     </div>
                 ))}
