@@ -1,11 +1,14 @@
 package com.kyungmin.lavanderia.laundry.service.impl;
 
+import com.kyungmin.lavanderia.cart.data.entity.LaundryCart;
+import com.kyungmin.lavanderia.cart.repository.LaundryCartRepository;
 import com.kyungmin.lavanderia.global.util.GoogleCloudUtils;
 import com.kyungmin.lavanderia.laundry.data.dto.LaundryDto.LaundryInsert;
 import com.kyungmin.lavanderia.laundry.data.entity.Laundry;
 import com.kyungmin.lavanderia.laundry.mapper.LaundryMapper;
 import com.kyungmin.lavanderia.laundry.repository.LaundryRepository;
 import com.kyungmin.lavanderia.laundry.service.LaundryService;
+import com.kyungmin.lavanderia.member.data.entity.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -19,8 +22,10 @@ public class LaundryServiceImpl implements LaundryService {
 
     private final LaundryRepository laundryRepository;
 
+    private final LaundryCartRepository laundryCartRepository;
+
     @Override
-    public void addLaundra(List<LaundryInsert> laundryInserts, List<MultipartFile> laundryImages) throws IOException {
+    public void addLaundra(Member member, List<LaundryInsert> laundryInserts, List<MultipartFile> laundryImages) throws IOException {
 
         if(laundryInserts.size() != laundryImages.size()) {
             throw new IllegalArgumentException("세탁물 정보와 이미지 정보가 일치하지 않습니다.");
@@ -34,7 +39,14 @@ public class LaundryServiceImpl implements LaundryService {
 
             Laundry laundryEntity = LaundryMapper.INSTANCE.toEntity(laundry, imageUrl);
 
-            laundryRepository.save(laundryEntity);
+            Laundry savedLaundry = laundryRepository.save(laundryEntity);
+
+            LaundryCart laundryCart = LaundryCart.builder()
+                    .laundry(savedLaundry)
+                    .member(member)
+                    .build();
+
+            laundryCartRepository.save(laundryCart);
         }
 
     }
