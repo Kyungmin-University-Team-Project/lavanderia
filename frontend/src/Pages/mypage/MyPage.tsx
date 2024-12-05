@@ -193,22 +193,6 @@ const MyPage = () => {
               </Link>
             </li>
             <li className="flex justify-between border-b-2 border-solid border-gray-50 pb-4">
-              <p className="text-sm font-bold">주문 내역</p>
-              <Link to="orderDetails">
-                <p className="text-sm text-gray-300">
-                  <FaAngleRight/>
-                </p>
-              </Link>
-            </li>
-            <li className="flex justify-between border-b-2 border-solid border-gray-50 pb-4">
-              <p className="text-sm font-bold">배송지 관리</p>
-              <Link to="deliveryAddressManagement">
-                <p className="text-sm text-gray-300">
-                  <FaAngleRight/>
-                </p>
-              </Link>
-            </li>
-            <li className="flex justify-between border-b-2 border-solid border-gray-50 pb-4">
               <p className="text-sm font-bold">문의 내용</p>
               <Link to="inquiryDetails">
                 <p className="text-sm text-gray-300">
