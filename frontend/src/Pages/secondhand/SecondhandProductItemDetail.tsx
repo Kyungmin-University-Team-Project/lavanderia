@@ -62,7 +62,7 @@ const ItemDetail: React.FC = () => {
                 <FaLocationDot className="text-red-600 mr-2"/> {item.region} {item.city} {item.subregion}
             </h1>
             <img src={getImageUrl(item.imgUrl)} alt={item.name} className='p-6 w-full object-cover border mb-2'/>
-            <h2 className='text-2xl font-semibold mt-1'>{item.name}</h2>
+            <h2 className='text-2xl font-semibold mt-4'>{item.name}</h2>
             <p className='text-base mt-1'>{item.description}</p>
             <p className='text-lg font-bold mb-1'>{item.price.toLocaleString()}원</p>
             <p>
