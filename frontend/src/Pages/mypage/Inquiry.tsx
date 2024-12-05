@@ -76,8 +76,10 @@ const Inquiry = () => {
                     'Content-Type': 'multipart/form-data'
                 }
             });
+            alert('문의에 성공했습니다.')
             console.log(response.data);
         } catch (error) {
+            alert('문의에 실패했습니다.')
             console.error(error);
         }
     };
