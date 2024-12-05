@@ -3,7 +3,7 @@ import axios from 'axios';
 import { useLocation, useParams } from 'react-router-dom';
 import Postcode from "../../Components/postcode/Postcode";
 import Modal from "./Modal";
-import ImportPayment from "./ImportPayment";
+import Payment from './Payment'
 
 interface Item {
     id: number;
@@ -105,12 +105,7 @@ const SecondPayment = () => {
                 <Postcode onComplete={handleComplete} />
             </Modal>
 
-            <article>
-                <h3>결제하기</h3>
-                <div>
-                    <ImportPayment/>
-                </div>
-            </article>
+            <Payment/>
         </div>
     );
 };
