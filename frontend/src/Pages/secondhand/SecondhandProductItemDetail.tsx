@@ -72,17 +72,19 @@ const ItemDetail: React.FC = () => {
             <p className='text-sm text-gray-500 mt-1'>관심 77 · 채팅 84</p>
             <div className='flex items-center justify-between mt-1'>
                 <button
-                    className='mt-4 bg-red-500 text-white  w-11/12 font-bold py-2 px-4 rounded'
-                    onClick={handleChatCLick}
+                  className='mt-4 bg-black text-white  w-11/12 font-bold py-2 px-4 rounded'
+                  onClick={handleChatCLick}
                 >
                     구매하기
                 </button>
 
                 <button
-                    className='mt-4 bg-amber-500 text-white font-bold py-2 px-4 rounded w-11/12  ml-4'
-                    onClick={handleBuyClick}>
+                  className="mt-4 bg-white border border-solid border-gray-300 font-bold py-2 px-4 rounded w-11/12 ml-4"
+                  onClick={handleBuyClick}
+                >
                     하루톡
                 </button>
+
             </div>
         </div>
     );
