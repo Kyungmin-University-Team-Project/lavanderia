@@ -86,7 +86,7 @@ const SecondhandBuy = () => {
                     <h2 className="text-xl font-bold mb-1">{item.price.toLocaleString()}원</h2>
                     <p className='text-gray-500 text-sm mb-2'>배송비 무료</p>
                 </div>
-                <button className="bg-red-500 text-white  p-2 w-full text-lg" onClick={handlePaymentCLick}>다음</button>
+                <button className="bg-black rounded text-white  p-2 w-full text-lg" onClick={handlePaymentCLick}>다음</button>
             </div>
         </div>
     );
