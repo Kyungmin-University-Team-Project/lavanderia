@@ -31,8 +31,8 @@ public class CustomOAuth2User implements OAuth2User{
 
             @Override
             public String getAuthority() {
-
-                return member.getMemberRole();
+                return null;
+                //return member.getMemberRole();
             }
         });
 

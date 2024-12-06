@@ -1,10 +1,10 @@
 package com.kyungmin.lavanderia.global.auth.oauth2.handler;
 
 import com.kyungmin.lavanderia.global.auth.jwt.data.repository.RefreshRepository;
+import com.kyungmin.lavanderia.global.auth.oauth2.data.dto.CustomOAuth2User;
 import com.kyungmin.lavanderia.global.auth.util.JWTUtil;
 import com.kyungmin.lavanderia.global.auth.util.MakeCookie;
 import com.kyungmin.lavanderia.global.auth.util.TokenExpirationTime;
-import com.kyungmin.lavanderia.global.auth.oauth2.data.dto.CustomOAuth2User;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -16,7 +16,8 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.util.Collection;
-import java.util.Iterator;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
@@ -38,13 +39,14 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 
         String memberId = customUserDetails.getUsername();
 
+        // 권한 정보 추출
         Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
-        Iterator<? extends GrantedAuthority> iterator = authorities.iterator();
-        GrantedAuthority auth = iterator.next();
-        String role = auth.getAuthority();
+        List<String> roles = authorities.stream()
+                .map(GrantedAuthority::getAuthority)
+                .collect(Collectors.toList());
 
-        String access = jwtUtil.createJwt("access", memberId, role, accessExpiredMs);
-        String refresh = jwtUtil.createJwt("refresh", memberId, role, refreshExpiredMs);
+        String access = jwtUtil.createJwt("access", memberId, roles, accessExpiredMs);
+        String refresh = jwtUtil.createJwt("refresh", memberId, roles, refreshExpiredMs);
 
         String ipAddress = request.getHeader("X-FORWARDED-FOR");
         if (ipAddress == null) {

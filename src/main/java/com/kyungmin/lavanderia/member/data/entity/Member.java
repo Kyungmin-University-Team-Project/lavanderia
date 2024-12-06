@@ -1,20 +1,31 @@
 package com.kyungmin.lavanderia.member.data.entity;
 
+import com.kyungmin.lavanderia.address.data.entity.Address;
+import com.kyungmin.lavanderia.cart.data.entity.Cart;
+import com.kyungmin.lavanderia.lifeLaundry.data.entity.LifeLaundryCart;
+import com.kyungmin.lavanderia.order.data.entity.Order;
+import com.kyungmin.lavanderia.repair.data.entity.Repair;
+import com.kyungmin.lavanderia.repair.data.entity.RepairCart;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Date;
+import java.util.List;
 
 @Entity
 @Getter
 @Setter
+@Builder
 @DynamicInsert
 @NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "TBL_MEMBER")
 public class Member implements UserDetails {
 
@@ -31,69 +42,86 @@ public class Member implements UserDetails {
     @Column(name = "MEMBER_EMAIL")
     private String memberEmail; // 멤버 이메일
 
-    @Column(name = "MEMBER_ROLE")
-    private String memberRole; // 멤버 권한
-
     @Column(name = "MEMBER_PHONE")
     private String memberPhone; // 멤버 전화번호
 
+    @Column(name = "MEMBER_BIRTH")
+    private LocalDate memberBirth; // 멤버 생일
+
     @Column(name = "MEMBER_LEVEL")
-    private String memberLevel; // 멤버 레벨
+    private int memberLevel = 1; // 멤버 레벨
 
     @Column(name = "MEMBER_POINT")
-    private String memberPoint; // 멤버 포인트
+    private int memberPoint = 0; // 멤버 포인트
 
     @Column(name = "AGREE_MARKETING_YN")
     private String agreeMarketingYn;  // 마케팅 동의 여부
 
     @Column(name = "ACC_INACTIVE_YN")
-    private String accInactiveYn;    // 계정 비활성화 여부
+    private String accInactiveYn = "N";    // 계정 비활성화 여부
 
     @Column(name = "TEMP_PWD_YN")
-    private String tempPwdYn; // 임시 비밀번호 여부
+    private String tempPwdYn = "N"; // 임시 비밀번호 여부
 
     @Column(name = "ACC_LOGIN_COUNT")
-    private long accLoginCount; // 누적 로그인 횟수
+    private int accLoginCount = 0; // 누적 로그인 횟수
 
     @Column(name = "LOGIN_FAIL_COUNT")
-    private long loginFailCount;  // 로그인 실패 횟수
+    private int loginFailCount = 0;  // 로그인 실패 횟수
 
     @Column(name = "LAST_LOGIN_DATE")
-    private Date lastLoginDate;   // 최근 로그인 일시
+    private LocalDateTime lastLoginDate;   // 최근 로그인 일시
 
-    @Column(name = "ACC_REGISTER_DATE")
-    private Date accRegisterDate;    // 계정 등록 일시
+    @Column(name = "ACC_REGISTER_DATE", updatable = false)
+    private LocalDateTime accRegisterDate;    // 계정 등록 일시
 
     @Column(name = "ACC_UPDATE_DATE")
-    private Date accUpdateDate;   // 계정 수정 일시
+    private LocalDateTime accUpdateDate;   // 계정 수정 일시
 
     @Column(name = "ACC_DELETE_DATE")
-    private Date accDeleteDate;   // 계정 삭제 일시
+    private LocalDateTime accDeleteDate;   // 계정 삭제 일시
+
+    @Column(name = "PROFILE_IMG")
+    private String memberProfileImg = "default"; // 프로필 이미지
 
 
-    @Builder
-    public Member(String memberId, String memberPwd, String memberName, String memberEmail, String memberPhone, String agreeMarketingYn, String memberRole){
-        this.memberId = memberId;
-        this.memberPwd = memberPwd;
-        this.memberName = memberName;
-        this.memberEmail = memberEmail;
-        this.memberPhone = memberPhone;
-        this.memberRole = memberRole;
-        this.agreeMarketingYn = agreeMarketingYn;
+    @OneToMany(mappedBy = "memberId", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    List<Role> roles = new ArrayList<>();
+
+    @OneToMany(mappedBy = "memberId", cascade = CascadeType.ALL)
+    List<Address> address; // 주소
+
+    @OneToMany(mappedBy = "memberId", cascade = CascadeType.ALL)
+    List<Cart> cart; // 장바구니
+
+    @OneToMany(mappedBy = "memberId", cascade = CascadeType.ALL)
+    List<Order> order; // 주문
+
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Repair> repairs = new ArrayList<>();
+
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<RepairCart> repairCarts = new ArrayList<>();
+
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<LifeLaundryCart> lifeLaundryCarts = new ArrayList<>();
+
+    @PrePersist
+    protected void onCreate() {
+        LocalDateTime now = LocalDateTime.now();
+        accRegisterDate = now;
+        accUpdateDate = now;
     }
-
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        Collection<GrantedAuthority> collection = new ArrayList<>();
 
-        collection.add(new GrantedAuthority() {
-            @Override
-            public String getAuthority() {
-                return memberRole;
-            }
-        });
-        return collection;
+        Collection<GrantedAuthority> authorities = new ArrayList<>();
+
+        for (Role role : roles) {
+            authorities.add(new SimpleGrantedAuthority(role.getAuthorities()));
+        }
+         return authorities;
     }
 
     @Override
@@ -123,6 +151,7 @@ public class Member implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return !accInactiveYn.equals("Y");
     }
+
 }

@@ -1,0 +1,80 @@
+[
+  {
+    "id": 1,
+    "name": "맛 나는 카레",
+    "description": "안 먹은 카레 팔아요",
+    "price": 100,
+    "city": "양주시",
+    "region": "경기",
+    "subregion": "덕계동",
+    "imgUrl": "1.jpg"
+  },
+  {
+    "id": 2,
+    "name": "맛 나는 카레",
+    "description": "안 먹은 카레 팔아요",
+    "price": 100,
+    "city": "양주시",
+    "region": "경기",
+    "subregion": "덕계동",
+    "imgUrl": "2.jpg"
+  },
+  {
+    "id": 3,
+    "name": "맛 나는 카레",
+    "description": "안 먹은 카레 팔아요",
+    "price": 100,
+    "city": "양주시",
+    "region": "경기",
+    "subregion": "덕계동",
+    "imgUrl": "3.jpg"
+  },
+  {
+    "id": 4,
+    "name": "맛 나는 카레",
+    "description": "안 먹은 카레 팔아요",
+    "price": 100,
+    "city": "양주시",
+    "region": "경기",
+    "subregion": "덕계동",
+    "imgUrl": "4.jpg"
+  },
+  {
+    "id": 5,
+    "name": "스킨",
+    "description": "자연을 담은 스킨 팔아요",
+    "price": 50,
+    "city": "의정부시",
+    "region": "경기",
+    "subregion": "가능동",
+    "imgUrl": "1.jpg"
+  },
+  {
+    "id": 6,
+    "name": "스킨",
+    "description": "자연을 담은 스킨 팔아요",
+    "price": 50,
+    "city": "의정부시",
+    "region": "경기",
+    "subregion": "가능동",
+    "imgUrl": "2.jpg"
+  },  {
+  "id":7,
+  "name": "스킨",
+  "description": "자연을 담은 스킨 팔아요",
+  "price": 50,
+  "city": "의정부시",
+  "region": "경기",
+  "subregion": "가능동",
+  "imgUrl": "3.jpg"
+},  {
+  "id": 8,
+  "name": "스킨",
+  "description": "자연을 담은 스킨 팔아요",
+  "price": 50,
+  "city": "의정부시",
+  "region": "경기",
+  "subregion": "가능동",
+  "imgUrl": "4.jpg"
+}
+]

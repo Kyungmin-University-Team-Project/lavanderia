@@ -19,7 +19,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 import java.io.IOException;
 import java.util.Collection;
-import java.util.Iterator;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 public class LoginFilter extends UsernamePasswordAuthenticationFilter {
@@ -54,14 +55,15 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         //유저 정보
         String memberId = authentication.getName();
 
+        // 권한 정보 추출
         Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
-        Iterator<? extends GrantedAuthority> iterator = authorities.iterator();
-        GrantedAuthority auth = iterator.next();
-        String role = auth.getAuthority();
+        List<String> roles = authorities.stream()
+                .map(GrantedAuthority::getAuthority)
+                .collect(Collectors.toList());
 
         //토큰 생성
-        String access = jwtUtil.createJwt("access", memberId, role, accessExpiredMs);
-        String refresh = jwtUtil.createJwt("refresh", memberId, role, refreshExpiredMs);
+        String access = jwtUtil.createJwt("access", memberId, roles, accessExpiredMs);
+        String refresh = jwtUtil.createJwt("refresh", memberId, roles, refreshExpiredMs);
 
         String ipAddress = request.getHeader("X-FORWARDED-FOR");
         if (ipAddress == null) {

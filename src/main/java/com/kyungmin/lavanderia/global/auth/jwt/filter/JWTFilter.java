@@ -2,6 +2,7 @@ package com.kyungmin.lavanderia.global.auth.jwt.filter;
 
 import com.kyungmin.lavanderia.global.auth.util.JWTUtil;
 import com.kyungmin.lavanderia.member.data.entity.Member;
+import com.kyungmin.lavanderia.member.data.entity.Role;
 import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -14,6 +15,8 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class JWTFilter extends OncePerRequestFilter {
 
@@ -65,11 +68,15 @@ public class JWTFilter extends OncePerRequestFilter {
 
         // username, role 값을 획득
         String memberId = jwtUtil.getMemberId(accessToken);
-        String role = jwtUtil.getRole(accessToken);
+        List<String> roles = jwtUtil.getRole(accessToken);
+
+        List<Role> roleList = roles.stream()
+                .map(role -> Role.builder().authorities(role).build())
+                .collect(Collectors.toList());
 
         Member userEntity = Member.builder()
                 .memberId(memberId)
-                .memberRole(role)
+                .roles(roleList)
                 .build();
 
         Authentication authToken = new UsernamePasswordAuthenticationToken(userEntity, null, userEntity.getAuthorities());

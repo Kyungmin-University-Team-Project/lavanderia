@@ -14,6 +14,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class ReissueServiceImpl implements ReissueService {
@@ -72,7 +74,7 @@ public class ReissueServiceImpl implements ReissueService {
         }
 
         String memberId = jwtUtil.getMemberId(refresh);
-        String role = jwtUtil.getRole(refresh);
+        List<String> role = jwtUtil.getRole(refresh);
 
         //make new JWT
         String newAccess = jwtUtil.createJwt("access", memberId, role, accessExpiredMs);

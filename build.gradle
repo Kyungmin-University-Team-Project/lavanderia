@@ -17,6 +17,10 @@ configurations {
     }
 }
 
+jar {
+    enabled = false
+}
+
 repositories {
     mavenCentral()
 }
@@ -62,6 +66,12 @@ dependencies {
     implementation group: 'org.springframework.cloud', name: 'spring-cloud-gcp-starter', version: '1.2.5.RELEASE'
     implementation group: 'org.springframework.cloud', name: 'spring-cloud-gcp-storage', version: '1.2.5.RELEASE'
 
+    // mapstruct
+    implementation 'org.mapstruct:mapstruct:1.5.3.Final'
+    annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.3.Final'
+
+    // commons-io
+    implementation 'commons-io:commons-io:2.11.0'
 }
 
 tasks.named('test') {

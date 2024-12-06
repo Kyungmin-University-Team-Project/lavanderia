@@ -1,0 +1,19 @@
+path: C:/Users/user/Documents/GitHub/clothes_seg/new_yolo_dataset/yolo_dataset
+train: train/images
+val: val/images
+names:
+  0: Blazer
+  1: Blouse
+  2: Dress
+  3: Hat
+  4: Hoodie
+  5: Longsleeve
+  6: Outwear
+  7: Pants
+  8: Polo
+  9: Shirt
+  10: Shoes
+  11: Shorts
+  12: Skirt
+  13: T-Shirt
+  14: Undershirt

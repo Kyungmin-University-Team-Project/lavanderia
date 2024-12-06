@@ -9,15 +9,17 @@ services:
       - '8080:8080'
     depends_on:
       - mysql
+      - redis
     environment:
       db.driverClass: 'com.mysql.cj.jdbc.Driver'
-      db.url: 'jdbc:mysql://mysql:3306/lavanderia'
+      db.url: 'jdbc:mysql://mysql:3306/lavanderia?serverTimezone=Asia/Seoul'
       db.username: 'root'
       db.password: 'root'
       redis.host: 'redis'
       redis.port: '6379'
     networks:
       - network
+    restart: unless-stopped
 
   mysql:
     image: mysql:latest
@@ -30,6 +32,7 @@ services:
       - ./docs/data.sql:/docker-entrypoint-initdb.d/data.sql
     networks:
       - network
+    restart: unless-stopped
 
   redis:
     image: redis
@@ -37,5 +40,6 @@ services:
       - '6379:6379'
     networks:
       - network
+
 networks:
   network:

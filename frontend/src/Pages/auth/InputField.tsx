@@ -1,37 +1,27 @@
-// src/components/InputField.tsx
+import React from "react";
+import {InputFieldProps} from "../../Typings/auth/signup";
 
-import React, { ChangeEvent } from "react";
-
-interface InputFieldProps {
-    id: string;
-    label: string;
-    type: string;
-    placeholder: string;
-    value: string;
-    onChange: (event: ChangeEvent<HTMLInputElement>) => void;
-    error?: string;
-    icon: React.ReactNode;
-    onFocus: () => void;
-    inputRef: React.RefObject<HTMLInputElement>;
-}
-
-const InputField = ({
-                        id,
-                        label,
-                        type,
-                        placeholder,
-                        value,
-                        onChange,
-                        error,
-                        icon,
-                        onFocus,
-                        inputRef,
-                    }: InputFieldProps) => (
+const InputField: React.FC<InputFieldProps> = ({
+                                                   id,
+                                                   label,
+                                                   type,
+                                                   placeholder,
+                                                   value,
+                                                   onChange,
+                                                   error,
+                                                   icon,
+                                                   onFocus,
+                                                   inputRef,
+                                                   onClick, // onClick 추가
+                                               }) => (
     <div className="mb-4">
         <label htmlFor={id} className="block text-sm font-medium text-gray-700">
             {label}
         </label>
-        <div className="flex items-center rounded-md border border-gray-300 shadow-sm">
+        <div
+            className="flex items-center rounded-md border border-gray-300 shadow-sm"
+            onClick={onClick} // onClick 추가
+        >
             {icon}
             <input
                 id={id}

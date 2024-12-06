@@ -58,7 +58,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
                     .memberId(username)
                     .memberName(oAuth2Response.getName())
                     .memberEmail(oAuth2Response.getEmail())
-                    .memberRole("ROLE_USER")
+                    //.memberRole("ROLE_USER")
                     .build();
 
 
@@ -72,7 +72,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
                     .memberId(existData.get().getMemberId())
                     .memberName(oAuth2Response.getName())
                     .memberEmail(oAuth2Response.getEmail())
-                    .memberRole(existData.get().getMemberRole())
+                    //.memberRole(existData.get().getMemberRole())
                     .build();
 
             memberRepository.save(member);

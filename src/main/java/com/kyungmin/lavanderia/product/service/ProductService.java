@@ -5,5 +5,5 @@ import com.kyungmin.lavanderia.product.data.dto.ProductDTO;
 import java.io.IOException;
 
 public interface ProductService {
-    public void updateProductInfo(ProductDTO productDTO) throws IOException;
+    void insertProduct(ProductDTO productDTO) throws IOException;
 }

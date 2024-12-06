@@ -1,192 +1,167 @@
-import home from "../../Assets/Img/20230516021744012618.jpg";
-import step1 from "../../Assets/Img/step01.png";
-import step2 from "../../Assets/Img/step02.png";
-import step3 from "../../Assets/Img/step03.png";
-import gitImage from "../../Assets/Img/af9e0e944df57d63d4eec5a60a89cfb2.gif";
-import price from "../../Assets/Img/price.png";
-import dry from "../../Assets/Img/dry.png";
-import drywarter from "../../Assets/Img/drywater.png";
-import delivery from "../../Assets/Img/delivery.png";
-import story from "../../Assets/Img/story.png";
-import luxury from "../../Assets/Img/luxury.png";
+import React, {useEffect,  useState} from 'react';
+import { useSwipeable } from 'react-swipeable';
+import gitImage from "../../Assets/Img/home/af9e0e944df57d63d4eec5a60a89cfb2.gif";
+import storyImage from "../../Assets/Img/home/story.png";
+import CardComponent from "../../Components/Card/CardComponent";
+import { Advertisement, CardsData, StepsData } from "../../Typings/Home/CardsData";
+import CardStepsData from "../../Components/Card/CardStepsData";
+import { FaAngleRight, FaAngleLeft } from "react-icons/fa6";
 
-const Home = () => {
+const Home: React.FC = () => {
+    const [data, setData] = useState<{ cardsData: CardsData[]; stepsData: StepsData[]; advertisement: Advertisement[] }>({
+        cardsData: [],
+        stepsData: [],
+        advertisement: [],
+    });
+
+    const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+    const handleNext = () => {
+        setCurrentImageIndex((prevIndex) => (prevIndex + 1) % data.advertisement.length);
+    }
+
+    const handlePrevious = () => {
+        setCurrentImageIndex((prevIndex) => (prevIndex - 1 + data.advertisement.length) % data.advertisement.length);
+    }
+
+
+    useEffect(() => {
+        fetch('/mock/home.json')
+            .then(response => response.json())
+            .then(setData)
+            .catch(error => console.error('Error fetching data:', error));
+    }, []);
+
+    const getAdvertisementImageUrl = (imageUrl: string) => {
+        try {
+            return require(`../../Assets/Img/home/advertisement/${imageUrl}`);
+        } catch (error) {
+            console.error('Error loading image:', error);
+            return '';
+        }
+    };
+
+    const getImageUrl = (imageUrl: string) => {
+        try {
+            return require(`../../Assets/Img/home/card/${imageUrl}`);
+        } catch (error) {
+            console.error('Error loading image:', error);
+            return '';
+        }
+    };
+
+    const getStepImageUrl = (imageUrl: string) => {
+        try {
+            return require(`../../Assets/Img/home/step/${imageUrl}`);
+        } catch (error) {
+            console.error('Error loading image:', error);
+            return '';
+        }
+    };
+
+    useEffect(() => {
+        const interval = setInterval(handleNext, 5000);
+        return () => clearInterval(interval);
+    }, [data.advertisement.length]);
+
+    const handlers = useSwipeable({
+        onSwipeStart: handleNext,
+        onSwipedRight: handlePrevious,
+    });
+
     return (
-        <section className="mt-4 font-roboto">
-            {/* 광고 */}
-            <article>
-                <div>
-                    <img src={home} alt="Home" className="w-full"/>
+        <section className="font-roboto m-auto">
+            <article className="relative">
+                <div className="m-auto max-w-xl" {...handlers}>
+                    {data.advertisement.length > 0 && (
+                        <div className="relative">
+                            <div
+                                className={`transition-transform duration-500  transform translate-x-0`}>
+                                <img
+                                    src={getAdvertisementImageUrl(data.advertisement[currentImageIndex].imgSrc)}
+                                    alt="Advertisement"
+                                    className="w-full object-cover"
+                                />
+                            </div>
+                            <button
+                                onClick={handlePrevious}
+                                className="absolute left-2 top-2/4 transform -translate-y-1/2  text-white px-1 py-1 rounded-3xl"
+                            >
+                                <FaAngleLeft/>
+                            </button>
+                            <button
+                                onClick={handleNext}
+                                className="absolute right-2 top-1/2 transform -translate-y-1/2  text-white px-1 py-1 rounded-3xl"
+                            >
+                                <FaAngleRight/>
+                            </button>
+                        </div>
+                    )}
                 </div>
             </article>
 
             {/* 첫 번쨰 소개글 */}
-            <article className="m-auto max-w-5xl">
-                <div className="mt-40 flex items-center justify-between pb-20">
-                    <div>
-                        <h4 className="mb-4 text-2xl text-blue-500">D A I L Y W A S H</h4>
-                        <h1 className="mb-4 text-4xl">
-                            귀찮은 세탁을 간편하게
+            <article className="m-auto max-w-7xl">
+                <div className="mt-20 sm:mt-20 pb-20">
+                    <div className="sm:w-1/2 m-auto text-center sm:text-left sm:p-4">
+                        <h4 className="mb-4 text-2xl text-center text-blue-500">D A I L Y W A S H</h4>
+                        <h1 className="mb-4 text-2xl w-full text-center  sm:text-3xl">
+                            귀찮은 세탁을 간편
                             <br/>
-                            모두를 위한 편리한 세탁 서비스
+                            하게 모두를 위한
+                            <br/>
+                            편리한 세탁 서비스
                         </h1>
-                        <span className="text-base text-gray-500">
-                라벤데리아 웹으로 간편하게 <br/>
-                세탁을 예약하세요.
-              </span>
                     </div>
-                    <img
-                        src={gitImage}
-                        alt="dailywash"
-                        className="h-90 w-80 rounded-2xl"
-                    />
+                    <img src={gitImage} alt="dailywash" className="h-90   p-4 rounded-3xl sm:w-full "/>
                 </div>
             </article>
 
             {/* 두 번째 소개글 */}
-            <article className="m-auto max-w-5xl">
-                <div className="mb-16  mt-16 text-center">
-                    <span className="text-3xl text-blue-500">All In One</span>{" "}
-                    <span className="text-3xl"> 세탁 서비스</span>
-                    <p className="mt-4 text-base text-gray-500">
-                        수거에서 부터 세탁 및 새벽 배송까지
-                    </p>
+            <article className="m-auto max-w-7xl">
+                <div className="text-center mb-16 mt-16">
+                    <h1 className="text-3xl text-blue-500">All In One</h1>
+                    <h1 className="text-3xl">Laundry Service</h1>
+                    <p className="mt-4 text-base text-gray-500">수거부터 세탁, 새벽까지 배달</p>
                 </div>
-                {/* 카드*/}
-                <div className="flex items-center justify-between pt-4">
-                    <div>
-                        <div>
-                            <img src={step1} alt="Home" className="mb-4 w-64"/>
-                        </div>
-                        <div>
-                            <p className="mb-4 border-b-4 border-blue-500"></p>
-                            <h4 className="mb-2 text-2xl">수거</h4>
-                            <p className="text-sm text-gray-500">
-                                박스나 비닐을 이용해 집앞에 세탁물을 <br/>
-                                놓아주시면 기사님이 픽업합니다.
-                            </p>
-                        </div>
-                    </div>
-                    {/* 카드 2*/}
-                    <div>
-                        <div>
-                            <img src={step2} className="mb-4 w-64" alt="Home"/>
-                        </div>
-                        <div>
-                            <p className="mb-4 border-b-4 border-blue-500"></p>
-                            <h4 className="mb-2 text-2xl">검수/세탁</h4>
-                            <p className="text-sm text-gray-500">
-                                박스나 비닐을 이용해 집앞에 세탁물을 <br/>
-                                놓아주시면 기사님이 픽업합니다.
-                            </p>
-                        </div>
-                    </div>
-                    {/* 카드 3*/}
-                    <div>
-                        <div>
-                            <img src={step3} className="mb-4 w-64" alt="Home"/>
-                        </div>
-                        <div>
-                            <p className="mb-4 border-b-4 border-blue-500"></p>
-                            <h4 className="mb-2 text-2xl">배달</h4>
-                            <p className="text-sm text-gray-500">
-                                박스나 비닐을 이용해 집앞에 세탁물을 <br/>
-                                놓아주시면 기사님이 픽업합니다.
-                            </p>
-                        </div>
-                    </div>
+                {/* 카드 */}
+                <div className="grid grid-cols-1 gap-4">
+                    {data.stepsData.map((step, index) => (
+                        <CardStepsData
+                            key={index}
+                            title={step.title}
+                            description={step.description}
+                            imgSrc={getStepImageUrl(step.imgSrc)}
+                        />
+                    ))}
+                </div>
+            </article>
+            {/* 세 번째 소개글 */}
+            <article className="m-auto max-w-7xl">
+                <div className="mt-32 flex flex-col  items-center justify-between">
+                    {data.cardsData.map((card, index) => (
+                        <CardComponent
+                            key={index}
+                            title={card.title}
+                            description={card.description}
+                            isReversed={card.isReversed}
+                            imgSrc={getImageUrl(card.imgSrc)} // Use the dynamic image URL
+                        />
+                    ))}
                 </div>
             </article>
 
-            {/* 세 번째 소개글*/}
-            <article className="m-auto max-w-5xl">
-                <div className="mt-60 flex flex-col items-center justify-between">
-                    {/* 지그재그 */}
-                    <div className="mb-16 mr-auto">
-                        <div>
-                            <img src={price} className="w-96" alt="Home"/>
-                        </div>
-                        <div>
-                            <h4 className="mb-4 mt-4 text-2xl">합리적인 가격</h4>
-                            <p className="text-base text-gray-500">
-                                업계 최대 최저가로 집에서 좋은 가성비로 깔끔하고 꺠끗한 세탁
-                                서비스를 <br/>
-                                이용해 보세요.
-                            </p>
-                        </div>
-                    </div>
-
-                    <div className="mb-16 ml-auto">
-                        <div>
-                            <h4 className="mb-4 text-right text-2xl">드라이&물세탁</h4>
-                            <p className="mb-4 text-base text-gray-500">
-                                라벤데리앙의 꼼꼼한 절차를 선정된 10년 이상의 경력을 보유한
-                                전문가가 <br/>
-                                고퀄리티의 세탁 서비스를 완성합니다.
-                            </p>
-                        </div>
-                        <div>
-                            <img src={dry} className="ml-auto w-80" alt="Home"/>
-                        </div>
-                    </div>
-
-                    <div className="mb-16 mr-auto">
-                        <div>
-                            <img src={drywarter} className="w-96" alt="Home"/>
-                        </div>
-                        <div>
-                            <h4 className="mb-4 mt-4 text-2xl">침구류 물세탁</h4>
-                            <p className="text-base text-gray-500">
-                                무거운 침구류를 이제 대신 세탁해드립니다. 깨끗하게 세탁 후{" "}
-                                <br/>
-                                배송해드립니다.
-                            </p>
-                        </div>
-                    </div>
-
-                    <div className="mb-16 ml-auto">
-                        <div>
-                            <h4 className="mb-4 text-right text-2xl">새벽배송</h4>
-                            <p className="mb-4 text-base text-gray-500">
-                                아침에 일어나서 바로 즉시 깨끗한 세탁물을 받을 수 있는 새벽
-                                배송을 <br/>
-                                진행합니다.
-                            </p>
-                        </div>
-                        <div>
-                            <img src={delivery} className="ml-auto w-96" alt="Home"/>
-                        </div>
-                    </div>
-
-                    <div className="mb-16 mr-auto">
-                        <div>
-                            <h4 className="mb-4 text-2xl">명품케어</h4>
-                            <p className="mb-4 text-base text-gray-500">
-                                고가의 브랜드 제품의 경우에는 프리미엄 장인들의 꼼꼼한
-                                세탁으로 <br/>
-                                진행하여 원단 손상은 최소화 깨끗함은 최대화로 완성됩니다.
-                            </p>
-                        </div>
-
-                        <div>
-                            <img src={luxury} className="w-96" alt="Home"/>
-                        </div>
-                    </div>
-                </div>
-            </article>
-
-            {/* 네 번쨰 소개글*/}
-            <section className="m-auto max-w-5xl">
-                <div className="mt-40">
-                    <h4 className="text-3xl">
+            {/* 네 번쨰 소개글 */}
+            <article className="m-auto max-w-7xl p-4">
+                <div className="mt-10 sm:ml-4 sm:mr-4">
+                    <h4 className="text-lg sm:text-3xl  sm:text-left leading-relaxed sm:leading-snug">
                         세탁으로 부터 찾는 나의 시간,
                         <br/>
-                        이제 <strong className="text-blue-500">라벤데리아에</strong>{" "}
-                        맡기세요
+                        이제 <strong className="font-bold">하루 세탁</strong>에 맡기세요
                     </h4>
-                    <img src={story} className="w-full" alt="Home"/>
+                    <img src={storyImage} className="w-full mt-4 sm:mt-8 object-cover h-full" alt="Home"/>
                 </div>
-            </section>
+            </article>
         </section>
     );
 };

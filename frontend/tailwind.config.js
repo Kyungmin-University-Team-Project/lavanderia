@@ -1,10 +1,10 @@
-// postcss.config.js
-
 module.exports = {
+  purge: ["./src/**/*.{js,jsx,ts,tsx}"],
+  darkMode: false, // or 'media' or 'class'
   theme: {
     extend: {
       fontFamily: {
-        roboto: ["Roboto", "sans-serif"], // Using 'sans' as an example
+        roboto: ["Roboto", "SCDream"],
         courgette: ["Courgette", "cursive"],
       },
       screens: {
@@ -12,11 +12,15 @@ module.exports = {
       },
     },
   },
+  variants: {
+    extend: {},
+  },
   plugins: [
     require("tailwindcss"),
+    require("@tailwindcss/forms"), // 폼 스타일 플러그인 추가
     require("postcss-preset-env")({
       stage: 0,
     }),
+    require('tailwind-scrollbar'), // 스크롤바 플러그인 추가
   ],
-  purge: ["./src/**/*.{js,jsx,ts,tsx}"],
 };
